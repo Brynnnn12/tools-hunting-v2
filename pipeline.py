@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import argparse
-import re
 import subprocess
 import sys
 from pathlib import Path
@@ -21,7 +20,7 @@ def banner() -> str:
  |_|   |_|\\___|_|\\_\\__,_|\\___| |_|   |_|\\___/ \\__\\___|_| |_|
 
   Pipeline v{VERSION}  —  {AUTHOR}
-  Unified recon: ReconForge  →  JSHunter  →  ASM  →  ReportHub
+  Unified recon: ReconForge  →  GitHubRecon + JSHunter  →  ASM  →  ScanForge  →  ReportHub
 """
 
 
@@ -34,39 +33,22 @@ def run(cmd: str, cwd: Path, desc: str) -> int:
     return result.returncode
 
 
-def extract_clean_urls(urls_path: Path) -> List[str]:
-    if not urls_path.exists():
-        return []
-    clean: List[str] = []
-    for line in urls_path.read_text(encoding="utf-8", errors="ignore").splitlines():
-        line = line.strip()
-        if not line:
-            continue
-        url = re.sub(r"\s*\[.*?\]\s*\(.*?\)\s*$", "", line).strip()
-        if url and url.startswith("http"):
-            clean.append(url)
-    return clean
-
-
-def guess_js_urls(all_urls: List[str]) -> List[str]:
-    js_exts = {".js", ".jsx", ".mjs", ".cjs"}
-    return [u for u in all_urls if any(u.lower().endswith(ext) for ext in js_exts)]
-
-
 def main() -> int:
     parser = argparse.ArgumentParser(
         prog="pipeline.py",
-        description="Full recon pipeline — ReconForge → JSHunter → AttackSurfaceMapper → ReportHub",
+        description="Full recon pipeline — ReconForge → GitHubRecon → JSHunter → ASM → ScanForge → ReportHub",
         epilog=(
             "Examples:\n"
             "  python pipeline.py -d example.com\n"
-            "  python pipeline.py -d example.com --skip-jshunter\n"
+            "  python pipeline.py -d example.com --skip-github\n"
             "  python pipeline.py -d example.com --skip-recon --skip-asm\n\n"
             "Output layout:\n"
             "  workspace/{domain}/\n"
             "  ├── recon/       ← ReconForge (subdomains, hosts, urls, whois)\n"
+            "  ├── github/      ← GitHubRecon (secrets, leaks, repos)\n"
             "  ├── jshunter/    ← JSHunter (endpoints, graphql, frameworks)\n"
-            "  ├── asm/         ← AttackSurfaceMapper (report, graph)\n"
+            "  ├── asm/         ← ASM (report, graph)\n"
+            "  ├── scan/        ← ScanForge (nmap + nuclei)\n"
             "  └── report/      ← ReportHub (dashboard, report)\n\n"
             "Author: brynnnn12  |  https://github.com/brynnnn12"
         ),
@@ -74,17 +56,21 @@ def main() -> int:
     )
     parser.add_argument("-d", "--domain", required=True, metavar="DOMAIN", help="Target domain (e.g. example.com)")
     parser.add_argument("--skip-recon", action="store_true", help="Skip ReconForge — subdomain/host/URL discovery")
+    parser.add_argument("--skip-github", action="store_true", help="Skip GitHubRecon — GitHub leak/secret search")
     parser.add_argument("--skip-jshunter", action="store_true", help="Skip JSHunter — JS file endpoint extraction")
     parser.add_argument("--skip-asm", action="store_true", help="Skip AttackSurfaceMapper — endpoint classification & graph")
     parser.add_argument("--skip-reporthub", action="store_true", help="Skip ReportHub — unified report & dashboard")
+    parser.add_argument("--skip-scanforge", action="store_true", help="Skip ScanForge — nmap + nuclei scan")
     parser.add_argument("--version", action="version", version=f"Pipeline v{VERSION} by {AUTHOR}")
     args = parser.parse_args()
 
     domain = args.domain
     ws = BASE / "workspace" / domain
     ws_recon = ws / "recon"
+    ws_github = ws / "github"
     ws_jsh = ws / "jshunter"
     ws_asm = ws / "asm"
+    ws_scan = ws / "scan"
     ws_report = ws / "report"
 
     ws.mkdir(parents=True, exist_ok=True)
@@ -99,7 +85,7 @@ def main() -> int:
     if not args.skip_recon:
         ret = run(
             f"python recon.py -d {domain} -o \"{ws}\" --all --json",
-            BASE / "reconforge",
+            BASE / "recon" / "reconforge",
             "ReconForge — subdomains, hosts, URLs, whois",
         )
         if ret:
@@ -113,31 +99,27 @@ def main() -> int:
             shutil.rmtree(rf_out, ignore_errors=True)
             print(f"    ReconForge output: {ws_recon}\n")
 
-    # ── Step 2: JSHunter ──
-    if not args.skip_jshunter:
-        js_urls: List[str] = []
-        for txt in [ws_recon / "urls.txt", ws_recon / "recon.txt"]:
-            js_urls = guess_js_urls(extract_clean_urls(txt))
-            if js_urls:
-                break
+    # ── Step 2: GitHubRecon ──
+    if not args.skip_github:
+        ret = run(
+            f"python github_recon.py -d {domain} -o \"{ws_github}\" --json",
+            BASE / "recon" / "github_recon",
+            "GitHubRecon — leak & secret search",
+        )
+        if ret:
+            print("  [!] GitHubRecon failed or no results\n")
 
-        if js_urls:
-            js_list = ws / "_js_urls.txt"
-            js_list.write_text("\n".join(js_urls) + "\n", encoding="utf-8")
-            print(f"  Found {len(js_urls)} JS URLs from ReconForge output\n")
-            ret = run(
-                f"python jshunter.py -f \"{js_list}\" -o \"{ws_jsh}\" --json",
-                BASE / "jshunter",
-                f"JSHunter — JS analysis ({len(js_urls)} URLs)",
-            )
-            js_list.unlink(missing_ok=True)
-            if ret:
-                print("  [!] JSHunter failed\n")
-        else:
-            print("  [!] No JS URLs found in ReconForge output — skipping JSHunter")
-            print("      Run JSHunter manually with -u or -f for JS file URLs\n")
+    # ── Step 3: JSHunter ──
+    if not args.skip_jshunter and ws_recon.exists():
+        ret = run(
+            f"python jshunter.py -i \"{ws_recon}\" -o \"{ws_jsh}\" --json",
+            BASE / "recon" / "jshunter",
+            "JSHunter — JS endpoint extraction from ReconForge",
+        )
+        if ret:
+            print("  [!] JSHunter failed or no JS URLs found\n")
 
-    # ── Step 3: Prepare ASM input ──
+    # ── Step 4: Prepare ASM input ──
     if not args.skip_asm:
         print("  ── Preparing ASM input ──")
 
@@ -158,6 +140,7 @@ def main() -> int:
             (jsh_src / "storage.txt", ws / "storage.txt"),
             (jsh_src / "frameworks.txt", ws / "frameworks.txt"),
             (jsh_src / "keywords.txt", ws / "keywords.txt"),
+            (jsh_src / "secrets.txt", ws / "secrets.txt"),
         ]
         for src, dst in mappings:
             if src.exists():
@@ -167,39 +150,46 @@ def main() -> int:
         print(f"    {copied} files prepared for ASM\n")
 
         ret = run(
-            f"python asm.py -i \"{ws}\" --all",
-            BASE / "attacksurfacemapper",
+            f"python asm.py -i \"{ws}\" -o \"{ws_asm}\" --all",
+            BASE / "recon" / "attacksurfacemapper",
             "AttackSurfaceMapper — classify endpoints, build graph",
         )
         if ret == 0:
             ws_asm.mkdir(parents=True, exist_ok=True)
-            asm_src = BASE / "attacksurfacemapper" / "reports"
+            asm_src = BASE / "recon" / "attacksurfacemapper" / "reports"
             if asm_src.exists():
                 for f in asm_src.iterdir():
                     (ws_asm / f.name).write_bytes(f.read_bytes())
                 print(f"    ASM output: {ws_asm}\n")
 
-    # ── Step 4: ReportHub ──
-    if not args.skip_reporthub:
+    # ── Step 5: ScanForge ──
+    if not args.skip_scanforge and ws_recon.exists():
         ret = run(
-            f"python reporthub.py -i \"{ws}\" --all",
-            BASE / "reporthub",
+            f"python scanforge.py --yes -i \"{ws_recon}\" -o \"{ws_scan}\" --nuclei-category all",
+            BASE / "scan" / "scanforge",
+            "ScanForge — nmap + nuclei scan",
+        )
+        if ret:
+            print("  [!] ScanForge failed or skipped (nmap/nuclei not installed)\n")
+
+    # ── Step 6: ReportHub ──
+    if not args.skip_reporthub:           
+        ret = run(
+            f"python reporthub.py -i \"{ws}\" -o \"{ws_report}\" --all",
+            BASE / "report" / "reporthub",
             "ReportHub — unified report & dashboard",
         )
         if ret == 0:
-            rh_src = BASE / "reporthub" / "reports"
-            if rh_src.exists():
-                ws_report.mkdir(parents=True, exist_ok=True)
-                for f in rh_src.iterdir():
-                    (ws_report / f.name).write_bytes(f.read_bytes())
-                print(f"    ReportHub output: {ws_report}\n")
+            print(f"    ReportHub output: {ws_report}\n")
 
     print(f"  ── Done ──")
     print(f"  Workspace: {ws}")
-    print(f"    Recon:     {ws_recon}")
-    print(f"    JSHunter:  {ws_jsh}")
-    print(f"    ASM:       {ws_asm}")
-    print(f"    ReportHub: {ws_report}")
+    print(f"    Recon:      {ws_recon}")
+    print(f"    GitHub:     {ws_github}")
+    print(f"    JSHunter:   {ws_jsh}")
+    print(f"    ASM:        {ws_asm}")
+    print(f"    Scan:       {ws_scan}")
+    print(f"    ReportHub:  {ws_report}")
     return 0
 
 

@@ -4,49 +4,53 @@ Toolkit for domain recon, JS analysis, secret scanning, attack surface mapping, 
 
 ## Tools overview
 
-| Tool | Dir | Entrypoint | Purpose |
-|---|---|---|---|
-| ReconForge | `reconforge/` | `recon.py` | Subdomains, hosts, URLs, whois |
-| JSHunter | `jshunter/` | `jshunter.py` | JS file analysis, endpoint extraction |
-| GitHubRecon | `github_recon/` | `github_recon.py` | GitHub leak/secret search |
-| AttackSurfaceMapper | `attacksurfacemapper/` | `asm.py` | Endpoint classification, graph viz |
-| ReportHub | `reporthub/` | `reporthub.py` | Unified report + dashboard |
-| **Pipeline** | root | `pipeline.py` | Run all 4 domain tools in sequence |
+| Tool | Category | Dir | Purpose |
+|---|---|---|---|---|
+| EngageForge | Setup | `setup/engageforge/` | Pentest engagement folder structure generator |
+| ReconForge | Recon | `recon/reconforge/` | Subdomains, hosts, URLs, whois |
+| JSHunter | Recon | `recon/jshunter/` | JS file analysis, endpoint extraction |
+| GitHubRecon | Recon | `recon/github_recon/` | GitHub leak/secret search |
+| AttackSurfaceMapper | Recon | `recon/attacksurfacemapper/` | Endpoint classification, graph viz |
+| ScanForge | Scan | `scan/scanforge/` | Automated nmap + nuclei scanner |
+| ReportHub | Report | `report/reporthub/` | Unified report + dashboard |
+| **Pipeline** | — | root `pipeline.py` | Run all 7 tools in sequence |
 
 ## Quick start
 
 ```bash
-# Install deps for each tool
-cd reconforge; pip install -r requirements.txt
+# Install deps per tool (scanforge is stdlib only)
+cd recon/reconforge; pip install -r requirements.txt
 cd ../jshunter; pip install -r requirements.txt
 cd ../github_recon; pip install -r requirements.txt
 cd ../attacksurfacemapper; pip install -r requirements.txt
 cd ../reporthub; pip install -r requirements.txt
 
-# Full pipeline (ReconForge → JSHunter → ASM → ReportHub)
-cd ..; python pipeline.py -d example.com
+# EngageForge & ScanForge have no external deps (stdlib only)
+cd ../../setup/engageforge; # no install needed
+cd ../../scan/scanforge; # no install needed
 
 # Individual tools
-python reconforge/recon.py -d example.com --all --json
-python jshunter/jshunter.py -u https://example.com/app.js --json
-python github_recon/github_recon.py -d example.com --json
+python recon/reconforge/recon.py -d example.com --all --json
+python recon/jshunter/jshunter.py -u https://example.com/app.js --json
+python recon/github_recon/github_recon.py -d example.com --json
+python setup/engageforge/engageforge.py -t example.com
+python scan/scanforge/scanforge.py -i recon/reconforge/output/example.com
 ```
 
 ## Pipeline (`pipeline.py`)
 
-Runs all 4 domain tools in sequence with a shared workspace at `workspace/{domain}/`:
+Runs all 5 tools in sequence with a shared workspace at `workspace/{domain}/`:
 
 ```
 workspace/{domain}/
-├── recon/        ← ReconForge output (subdomains, hosts, urls, whois)
-├── jshunter/     ← JSHunter output (endpoints, graphql, frameworks, etc.)
-├── asm/          ← ASM output (report.json, attack_surface.png)
-├── report/       ← ReportHub output (report.html, dashboard.html)
-├── live.txt      ← copy for ASM
-└── all_urls.txt  ← merged URLs for ASM
+├── recon/        ← ReconForge (subdomains, hosts, urls, whois)
+├── jshunter/     ← JSHunter (endpoints, graphql, frameworks, etc.)
+├── asm/          ← ASM (report.json, attack_surface.png)
+├── scan/         ← ScanForge (nmap + nuclei)
+└── report/       ← ReportHub (dashboard, report)
 ```
 
-Flags: `--skip-recon`, `--skip-jshunter`, `--skip-asm`, `--skip-reporthub`.
+Flags: `--skip-recon`, `--skip-jshunter`, `--skip-asm`, `--skip-scanforge`, `--skip-reporthub`.
 
 ## Important constraints
 

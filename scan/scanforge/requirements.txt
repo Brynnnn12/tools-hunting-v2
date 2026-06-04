@@ -1,0 +1,2 @@
+# No external dependencies — stdlib only (xml.etree, json, subprocess)
+# nmap and nuclei must be installed on the system separately
