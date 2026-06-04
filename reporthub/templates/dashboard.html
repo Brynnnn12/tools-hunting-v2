@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ReportHub Dashboard</title>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      body { background: #0f1116; color: #c9d1d9; }
+      .card { background: #161b22; border-color: #30363d; }
+    </style>
+  </head>
+  <body>
+    <div class="container py-4">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
+        <div>
+          <h1 class="h3 mb-1">ReportHub Dashboard</h1>
+          <div class="text-secondary">Target: {{ target }} | {{ timestamp }} | <span class="text-info">brynnnn12</span></div>
+        </div>
+        <span class="badge rounded-pill px-3 py-2 bg-secondary">Interactive Dashboard</span>
+      </div>
+
+      <div class="row g-3 mb-4">
+        <div class="col-6 col-lg-2">
+          <div class="card p-3 h-100">
+            <div class="text-secondary small">Subdomains</div>
+            <div class="fs-4 fw-semibold">{{ stats.total_subdomains }}</div>
+          </div>
+        </div>
+        <div class="col-6 col-lg-2">
+          <div class="card p-3 h-100">
+            <div class="text-secondary small">Live Hosts</div>
+            <div class="fs-4 fw-semibold">{{ stats.total_live_hosts }}</div>
+          </div>
+        </div>
+        <div class="col-6 col-lg-2">
+          <div class="card p-3 h-100">
+            <div class="text-secondary small">URLs</div>
+            <div class="fs-4 fw-semibold">{{ stats.total_urls }}</div>
+          </div>
+        </div>
+        <div class="col-6 col-lg-2">
+          <div class="card p-3 h-100">
+            <div class="text-secondary small">Endpoints</div>
+            <div class="fs-4 fw-semibold">{{ stats.total_endpoints }}</div>
+          </div>
+        </div>
+        <div class="col-6 col-lg-2">
+          <div class="card p-3 h-100">
+            <div class="text-secondary small">GraphQL</div>
+            <div class="fs-4 fw-semibold">{{ stats.total_graphql }}</div>
+          </div>
+        </div>
+        <div class="col-6 col-lg-2">
+          <div class="card p-3 h-100">
+            <div class="text-secondary small">Frameworks</div>
+            <div class="fs-4 fw-semibold">{{ stats.total_frameworks }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-12 col-lg-6">
+          <div class="card p-3 h-100">
+            <h2 class="h6">Endpoint Categories</h2>
+            {{ dashboard_snippets.endpoint_chart | safe }}
+          </div>
+        </div>
+        <div class="col-12 col-lg-6">
+          <div class="card p-3 h-100">
+            <h2 class="h6">Framework Distribution</h2>
+            {{ dashboard_snippets.framework_chart | safe }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

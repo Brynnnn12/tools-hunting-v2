@@ -1,0 +1,5 @@
+rich
+jinja2
+pandas
+plotly
+matplotlib
