@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from concurrent.futures import ThreadPoolExecutor
 from typing import List
 
 
@@ -19,8 +20,9 @@ class WhoIsModule:
                 return ["[!] Whois not available (install python-whois or system whois)"]
 
     def _run_python_whois(self) -> List[str]:
-        import whois
-        w = whois.whois(self.domain)
+        with ThreadPoolExecutor(max_workers=1) as pool:
+            future = pool.submit(self._fetch_whois)
+            w = future.result(timeout=15)
         lines: List[str] = []
         for key in [
             "domain_name", "registrar", "whois_server", "referral_url",
@@ -40,11 +42,15 @@ class WhoIsModule:
             lines.append("[!] No whois data returned")
         return lines
 
+    def _fetch_whois(self):
+        import whois
+        return whois.whois(self.domain)
+
     def _run_system_whois(self) -> List[str]:
         import subprocess
         result = subprocess.run(
             ["whois", self.domain],
-            capture_output=True, text=True, timeout=15,
+            capture_output=True, text=True, timeout=10,
         )
         output = result.stdout.strip()
         if not output:

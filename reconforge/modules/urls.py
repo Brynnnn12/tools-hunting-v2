@@ -7,7 +7,7 @@ import requests as req
 
 from core.utils import run_tool, which
 
-HTTP_TIMEOUT = 5.0
+HTTP_TIMEOUT = 3.0
 MAX_WORKERS = 20
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
 MAX_URLS = 300
@@ -140,7 +140,8 @@ class UrlsModule:
             result = subprocess.run(
                 ["httpx", "-silent", "-status-code", "-content-length"],
                 input="\n".join(candidates),
-                capture_output=True, text=True, timeout=30,
+                capture_output=True, text=True,
+                timeout=15,
             )
             if not result.stdout.strip():
                 return []
@@ -150,8 +151,9 @@ class UrlsModule:
                 if line:
                     parts = line.rsplit(None, 2)
                     if len(parts) == 3:
-                        url, code, size = parts
-                        size = size.replace("B", "").strip()
+                        url, raw_code, raw_size = parts
+                        code = raw_code.strip("[]")
+                        size = raw_size.strip("[]B")
                         lines.append(f"{url} [{code}] ({size} bytes)")
                     else:
                         lines.append(line)

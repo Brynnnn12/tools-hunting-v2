@@ -27,7 +27,8 @@ BANNER = r"""
                                                   |___/ 
 """
 
-VERSION = "0.1.0"
+VERSION = "0.2.0"
+AUTHOR = "brynnnn12"
 
 
 class ReconForgeApp:
@@ -81,6 +82,10 @@ class ReconForgeApp:
             report.write(results, summary, self.config.json_enabled, self.config.html_enabled)
 
         self._print_summary(summary)
+        self.console.print(
+            f"\n[bold green]Done![/bold green] Output saved to: "
+            f"[underline]{self.config.output_dir}[/underline]"
+        )
         self.logger.info("ReconForge completed")
         return 0
 
@@ -137,7 +142,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--report", action="store_true", help="Generate report")
     parser.add_argument("--json", action="store_true", help="Export JSON alongside TXT")
     parser.add_argument("--html", action="store_true", help="Export HTML report")
-    parser.add_argument("--version", action="version", version=f"ReconForge {VERSION}")
+    parser.add_argument("--version", action="version", version=f"ReconForge v{VERSION} by {AUTHOR}")
 
     return parser
 
@@ -164,6 +169,7 @@ def main() -> int:
 
     console = Console()
     console.print(f"[bold cyan]{BANNER}[/bold cyan]")
+    console.print(f"[dim]v{VERSION} by {AUTHOR} | {domain}[/dim]\n")
 
     modules: List[object] = []
     if args.all or args.subdomains:

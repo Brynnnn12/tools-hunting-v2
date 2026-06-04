@@ -1,6 +1,6 @@
 # ReconForge
 
-ReconForge adalah framework recon OSINT dan asset management untuk target yang memiliki izin pengujian. Modular, multi-source, dengan output TXT/JSON/HTML.
+ReconForge adalah framework recon OSINT dan asset management untuk target yang memiliki izin pengujian. Modular, multi-source, dengan output TXT/JSON/HTML — dibuat oleh [brynnnn12](https://github.com/brynnnn12).
 
 ## Fitur
 
@@ -67,11 +67,12 @@ output/example.com/
 ```
 
 ## Output structure
-Menggunakan `ThreadPoolExecutor` (20–30 workers) untuk concurrent lookups dengan DNS timeout 5 detik.
+Menggunakan `ThreadPoolExecutor` (20–30 workers) untuk concurrent lookups dengan DNS timeout 3 detik.
 
 ## Catatan
 
 - Gunakan hanya untuk target yang sudah memiliki izin pengujian.
-- ReconForge tidak menyediakan exploit, scanner kerentanan, brute force kredensial, atau fungsi ofensif.
+- ReconForge tidak menyediakan exploit, scanner kerentanan, atau fungsi ofensif.
 - Semua tool eksternal bersifat opsional — modul tetap berjalan tanpa error jika tools tidak terinstall.
+- Author: [brynnnn12](https://github.com/brynnnn12) | Version: 0.2.0
 - Modul whois akan fallback ke system whois jika python-whois tidak tersedia.

@@ -35,7 +35,7 @@ def which(binary: str) -> Optional[str]:
     return shutil.which(binary)
 
 
-def run_tool(cmd: List[str], timeout: int = 60) -> Optional[str]:
+def run_tool(cmd: List[str], timeout: int = 30) -> Optional[str]:
     try:
         result = subprocess.run(
             cmd, capture_output=True, text=True, timeout=timeout

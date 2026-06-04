@@ -34,11 +34,11 @@ Modules produce real OSINT data using public APIs, DNS resolution, and external 
 |---|---|
 | subdomains | crt.sh API + DNS A-record brute force (~100 wordlist) + Sublist3r + Subfinder + Assetfinder + Amass (passive) |
 | hosts | DNS A-record resolution (~60 hostnames) + dnsx |
-| urls | HTTP GET probe (requests) + gau + waybackurls + katana (capped at 300 URLs) |
+| urls | HTTP GET probe (requests) + httpx + gau + waybackurls + katana (capped at 300 URLs) |
 | whois | python-whois library with system `whois` fallback |
 | report | Aggregates into TXT / JSON / HTML |
 
-All modules use `ThreadPoolExecutor` (20–30 workers) for concurrent lookups. DNS timeout is 5s.
+All modules use `ThreadPoolExecutor` (20–30 workers) for concurrent lookups. DNS timeout is 3s.
 
 ## External tools (optional, pre-installed on Kali)
 
@@ -66,3 +66,4 @@ All tools are optional — modules gracefully skip missing tools without error.
 - `.github/copilot-instructions.md` is a stale project checklist, ignore it.
 - Always run from `reconforge/` as working directory (recon.py uses relative paths).
 - Requires internet access (crt.sh API, DNS, HTTP probing, whois).
+- Author: [brynnnn12](https://github.com/brynnnn12) | Version: 0.2.0

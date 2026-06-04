@@ -32,7 +32,7 @@ SUBDOMAIN_WORDLIST = [
 ]
 
 CRTSH_URL = "https://crt.sh/?q=%25.{domain}&output=json"
-DNS_TIMEOUT = 5.0
+DNS_TIMEOUT = 3.0
 MAX_WORKERS = 30
 
 

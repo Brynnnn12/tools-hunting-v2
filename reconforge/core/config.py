@@ -11,4 +11,4 @@ class AppConfig:
     output_dir: Path
     json_enabled: bool
     html_enabled: bool = False
-    version: str = "0.1.0"
+    version: str = "0.2.0"

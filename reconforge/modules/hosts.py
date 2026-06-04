@@ -20,7 +20,7 @@ HOST_WORDLIST = [
     "panel", "cpanel", "direct", "exchange",
 ]
 
-DNS_TIMEOUT = 5.0
+DNS_TIMEOUT = 3.0
 MAX_WORKERS = 30
 
 
