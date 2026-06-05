@@ -22,28 +22,35 @@ logging.basicConfig(
 
 
 BANNER = f"""
-╔══════════════════════════════════════════════════════════╗
-║                                                        ║
-║   BBBB   RRRR   Y   Y  N   N  N   N  N   N  N   N     ║
-║   B   B  R   R   Y Y   NN  N  NN  N  NN  N  NN  N     ║
-║   BBBB   RRRR     Y    N N N  N N N  N N N  N N N     ║
-║   B   B  R  R     Y    N  NN  N  NN  N  NN  N  NN     ║
-║   BBBB   R   R    Y    N   N  N   N  N   N  N   N     ║
-║                                                        ║
-║           ____  _       _       _                       ║
-║          |  _ \\ (_) ___| | ____| | ___                  ║
-║          | |_) | |/ __| |/ / _` |/ _ \\                 ║
-║          |  __/| | (__|   < (_| |  __/                 ║
-║          |_|   |_|\\___|_|\\_\\__,_|\\___|                 ║
-║                                                        ║
-║   Pipeline v{VERSION:<5}                               ║
-║   {AUTHOR:<47}║
-║                                                        ║
-║   ReconForge  ->  GitHubRecon + JSHunter               ║
-║   ->  ASM  ->  ScanForge  ->  ReportHub                ║
-║                                                        ║
-╚══════════════════════════════════════════════════════════╝
+\u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557
+\u2551                                                        \u2551
+\u2551   BBBB   RRRR   Y   Y  N   N  N   N  N   N  N   N     \u2551
+\u2551   B   B  R   R   Y Y   NN  N  NN  N  NN  N  NN  N     \u2551
+\u2551   BBBB   RRRR     Y    N N N  N N N  N N N  N N N     \u2551
+\u2551   B   B  R  R     Y    N  NN  N  NN  N  NN  N  NN     \u2551
+\u2551   BBBB   R   R    Y    N   N  N   N  N   N  N   N     \u2551
+\u2551                                                        \u2551
+\u2551           ____  _       _       _                       \u2551
+\u2551          |  _ \\ (_) ___| | ____| | ___                  \u2551
+\u2551          | |_) | |/ __| |/ / _` |/ _ \\                 \u2551
+\u2551          |  __/| | (__|   < (_| |  __/                 \u2551
+\u2551          |_|   |_|\\___|_|\\_\\__,_|\\___|                 \u2551
+\u2551                                                        \u2551
+\u2551   Pipeline v{VERSION:<5}                               \u2551
+\u2551   {AUTHOR:<47}\u2551
+\u2551                                                        \u2551
+\u2551   ReconForge  ->  GitHubRecon + JSHunter               \u2551
+\u2551   ->  ASM  ->  ScanForge  ->  ReportHub                \u2551
+\u2551                                                        \u2551
+\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255d
 """
+
+
+def confirm(step_name: str, skip_flag: bool) -> bool:
+    if skip_flag:
+        return False
+    answer = input(f"\n  Run {step_name}? [Y/n]: ").strip().lower()
+    return answer in ("", "y", "yes")
 
 
 def run(cmd: List[str], cwd: Path, desc: str) -> int:
@@ -67,6 +74,7 @@ def main() -> int:
                 "Examples:\n"
                 "  python pipeline.py -d example.com\n"
                 "  python pipeline.py -d example.com -o /path/to/outputs\n"
+                "  python pipeline.py -d example.com --yes\n"
                 "  python pipeline.py -d example.com --skip-github\n"
                 "  python pipeline.py -d example.com --skip-recon --skip-asm\n\n"
                 "Output layout (default: workspace/{domain}/):\n"
@@ -82,12 +90,14 @@ def main() -> int:
         )
         parser.add_argument("-d", "--domain", required=True, metavar="DOMAIN", help="Target domain (e.g. example.com)")
         parser.add_argument("-o", "--output", metavar="DIR", help="Output directory (default: workspace/{domain})")
+        parser.add_argument("-s", "--structure", action="store_true", help="Create folder structure only, no tools")
         parser.add_argument("--skip-recon", action="store_true", help="Skip ReconForge \u2014 subdomain/host/URL discovery")
         parser.add_argument("--skip-github", action="store_true", help="Skip GitHubRecon \u2014 GitHub leak/secret search")
         parser.add_argument("--skip-jshunter", action="store_true", help="Skip JSHunter \u2014 JS file endpoint extraction")
         parser.add_argument("--skip-asm", action="store_true", help="Skip AttackSurfaceMapper \u2014 endpoint classification & graph")
         parser.add_argument("--skip-reporthub", action="store_true", help="Skip ReportHub \u2014 unified report & dashboard")
         parser.add_argument("--skip-scanforge", action="store_true", help="Skip ScanForge \u2014 nmap + nuclei scan")
+        parser.add_argument("--yes", action="store_true", help="Run all steps without prompting")
         parser.add_argument("--version", action="version", version=f"Pipeline v{VERSION} by {AUTHOR}")
         args = parser.parse_args()
 
@@ -101,17 +111,44 @@ def main() -> int:
         ws_report = ws / "report"
 
         ws.mkdir(parents=True, exist_ok=True)
+        ws_recon.mkdir(parents=True, exist_ok=True)
+        ws_github.mkdir(parents=True, exist_ok=True)
+        ws_jsh.mkdir(parents=True, exist_ok=True)
+        ws_asm.mkdir(parents=True, exist_ok=True)
+        ws_scan.mkdir(parents=True, exist_ok=True)
+        ws_report.mkdir(parents=True, exist_ok=True)
+
         print(BANNER)
         print(f"  Domain: {domain}")
-        print(f"  Workspace: {ws}\n")
+        print(f"  Workspace: {ws}")
+        print(f"  Mode: step-by-step (use --yes to auto-run all, Ctrl+C to abort)")
+        if args.structure:
+            print(f"  Mode: structure only (no tools)")
+        print()
+        sys.stdout.flush()
+
+        if args.structure:
+            print(f"  \u2500\u2500 Structure created \u2500\u2500")
+            print(f"    {ws_recon}")
+            print(f"    {ws_github}")
+            print(f"    {ws_jsh}")
+            print(f"    {ws_asm}")
+            print(f"    {ws_scan}")
+            print(f"    {ws_report}")
+            return 0
 
         PY = [sys.executable]
 
         # ReconForge always appends domain to its output path
         rf_out = ws / domain
 
+        def ask(name: str, skip: bool) -> bool:
+            if args.yes:
+                return not skip
+            return confirm(name, skip)
+
         # Step 1: ReconForge
-        if not args.skip_recon:
+        if ask("ReconForge", args.skip_recon):
             ret = run(
                 PY + ["recon.py", "-d", domain, "-o", str(ws), "--all", "--json"],
                 BASE / "recon" / "reconforge",
@@ -125,9 +162,11 @@ def main() -> int:
                     (ws_recon / f.name).write_bytes(f.read_bytes())
                 shutil.rmtree(rf_out, ignore_errors=True)
                 print(f"    ReconForge output: {ws_recon}\n")
+        else:
+            print(f"  [-] Skipped ReconForge\n")
 
         # Step 2: GitHubRecon
-        if not args.skip_github:
+        if ask("GitHubRecon", args.skip_github):
             ret = run(
                 PY + ["github_recon.py", "-d", domain, "-o", str(ws_github), "--json"],
                 BASE / "recon" / "github_recon",
@@ -135,19 +174,26 @@ def main() -> int:
             )
             if ret:
                 print("  [!] GitHubRecon failed or no results\n")
+        else:
+            print(f"  [-] Skipped GitHubRecon\n")
 
         # Step 3: JSHunter
-        if not args.skip_jshunter and ws_recon.exists():
-            ret = run(
-                PY + ["jshunter.py", "-i", str(ws_recon), "-o", str(ws_jsh), "--json"],
-                BASE / "recon" / "jshunter",
-                "JSHunter \u2014 JS endpoint extraction from ReconForge",
-            )
-            if ret:
-                print("  [!] JSHunter failed or no JS URLs found\n")
+        if ask("JSHunter", args.skip_jshunter or not ws_recon.exists()):
+            if ws_recon.exists():
+                ret = run(
+                    PY + ["jshunter.py", "-i", str(ws_recon), "-o", str(ws_jsh), "--json"],
+                    BASE / "recon" / "jshunter",
+                    "JSHunter \u2014 JS endpoint extraction from ReconForge",
+                )
+                if ret:
+                    print("  [!] JSHunter failed or no JS URLs found\n")
+            else:
+                print("  [-] No ReconForge data \u2014 skipping JSHunter\n")
+        else:
+            print(f"  [-] Skipped JSHunter\n")
 
-        # Step 4: Prepare ASM input
-        if not args.skip_asm:
+        # Step 4: ASM
+        if ask("AttackSurfaceMapper", args.skip_asm):
             print("  \u2500\u2500 Preparing ASM input \u2500\u2500")
 
             jsh_src = ws_jsh
@@ -187,19 +233,26 @@ def main() -> int:
                     for f in asm_src.iterdir():
                         (ws_asm / f.name).write_bytes(f.read_bytes())
                     print(f"    ASM output: {ws_asm}\n")
+        else:
+            print(f"  [-] Skipped AttackSurfaceMapper\n")
 
         # Step 5: ScanForge
-        if not args.skip_scanforge and ws_recon.exists():
-            ret = run(
-                PY + ["scanforge.py", "--yes", "-i", str(ws_recon), "-o", str(ws_scan), "--nuclei-category", "all"],
-                BASE / "scan" / "scanforge",
-                "ScanForge \u2014 nmap + nuclei scan",
-            )
-            if ret:
-                print("  [!] ScanForge failed or skipped (nmap/nuclei not installed)\n")
+        if ask("ScanForge", args.skip_scanforge):
+            if ws_recon.exists():
+                ret = run(
+                    PY + ["scanforge.py", "--yes", "-i", str(ws_recon), "-o", str(ws_scan), "--nuclei-category", "all"],
+                    BASE / "scan" / "scanforge",
+                    "ScanForge \u2014 nmap + nuclei scan",
+                )
+                if ret:
+                    print("  [!] ScanForge failed or skipped (nmap/nuclei not installed)\n")
+            else:
+                print("  [-] No ReconForge data \u2014 skipping ScanForge\n")
+        else:
+            print(f"  [-] Skipped ScanForge\n")
 
         # Step 6: ReportHub
-        if not args.skip_reporthub:
+        if ask("ReportHub", args.skip_reporthub):
             ret = run(
                 PY + ["reporthub.py", "-i", str(ws), "-o", str(ws_report), "--all"],
                 BASE / "report" / "reporthub",
@@ -207,6 +260,8 @@ def main() -> int:
             )
             if ret == 0:
                 print(f"    ReportHub output: {ws_report}\n")
+        else:
+            print(f"  [-] Skipped ReportHub\n")
 
         print(f"  \u2500\u2500 Done \u2500\u2500")
         print(f"  Workspace: {ws}")
@@ -217,6 +272,9 @@ def main() -> int:
         print(f"    Scan:       {ws_scan}")
         print(f"    ReportHub:  {ws_report}")
         return 0
+    except (KeyboardInterrupt, EOFError):
+        print("\n  [!] Interrupted")
+        return 130
     except Exception as exc:
         logging.exception("Pipeline failed")
         print(f"\n  [red]Error:[/red] {exc}")
