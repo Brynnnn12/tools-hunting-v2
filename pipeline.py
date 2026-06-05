@@ -66,7 +66,7 @@ def main() -> int:
             epilog=(
                 "Examples:\n"
                 "  python pipeline.py -d example.com\n"
-                "  python pipeline.py -d example.com -o my_output\n"
+                "  python pipeline.py -d example.com -o /path/to/outputs\n"
                 "  python pipeline.py -d example.com --skip-github\n"
                 "  python pipeline.py -d example.com --skip-recon --skip-asm\n\n"
                 "Output layout (default: workspace/{domain}/):\n"
@@ -92,7 +92,7 @@ def main() -> int:
         args = parser.parse_args()
 
         domain = args.domain
-        ws = Path(args.output).resolve() if args.output else BASE / "workspace" / domain
+        ws = (Path(args.output).resolve() / domain) if args.output else BASE / "workspace" / domain
         ws_recon = ws / "recon"
         ws_github = ws / "github"
         ws_jsh = ws / "jshunter"
