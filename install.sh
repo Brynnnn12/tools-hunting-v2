@@ -164,10 +164,10 @@ else:
 
 echo ""
 echo ""
-echo -e "${GREEN}╔══════════════════════════════════════════════════════════════════╗"
+echo -e "        ${GREEN}╔══════════════════════════════════════════════════════════════════╗"
 echo -e "        ║                 INSTALLATION COMPLETE                            ║"
 echo -e "        ╠══════════════════════════════════════════════════════════════════╣"
-echo -e "        ║  ${CYAN}Log     :${NC} $LOG_FILE"                                ║"  
+echo -e "        ║  ${CYAN}Log     :${NC} $LOG_FILE                                ║"
 echo -e "        ║  ${CYAN}Activate:${NC} source .venv/bin/activate                 ║"
 echo -e "        ║                        .venv\\Scripts\\activate                  ║"
 echo -e "        ║  ${YELLOW}Token :${NC}  export GITHUB_TOKEN=ghp_xxx              ║"

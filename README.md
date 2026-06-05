@@ -1,64 +1,63 @@
-# 🛡️ BugBountySuite — OSINT & Recon Toolkit
+# BugBountySuite — OSINT & Recon Toolkit
 
-Suite alat untuk bug bounty recon, analisis JavaScript, secret scanning, visualisasi attack surface, dan pelaporan terpadu. Dibangun oleh [brynnnn12](https://github.com/brynnnn12).
-
----
-
-## 📦 Komponen
-
-| Tool | Kategori | Lokasi | Fungsi |
-|---|---|---|---|
-| **EngageForge** | Setup | `setup/engageforge/` | Generate struktur folder engagement pentest |
-| **ReconForge** | Recon | `recon/reconforge/` | Subdomain enumeration, host discovery, URL scraper, whois |
-| **JSHunter** | Recon | `recon/jshunter/` | Analisis file JS, ekstraksi endpoint, graphql, storage, dll |
-| **GitHubRecon** | Recon | `recon/github_recon/` | Pencarian secret/leak di GitHub |
-| **AttackSurfaceMapper** | Recon | `recon/attacksurfacemapper/` | Klasifikasi endpoint, visualisasi graph jaringan |
-| **ScanForge** | Scan | `scan/scanforge/` | Pemindaian otomatis nmap + nuclei |
-| **ReportHub** | Report | `report/reporthub/` | Dashboard interaktif & laporan HTML/JSON terpadu |
-| **Pipeline** | Orkestrasi | `pipeline.py` | Menjalankan seluruh tool secara berurutan dalam 1 perintah |
+All-in-one reconnaissance toolkit for bug bounty hunting, penetration testing, and attack surface mapping. Built by [brynnnn12](https://github.com/brynnnn12).
 
 ---
 
-## 🚀 Quick Start
+## Components
+
+| Tool | Category | Location | Purpose |
+|------|----------|----------|---------|
+| **EngageForge** | Setup | `setup/engageforge/` | Pentest engagement folder structure generator |
+| **ReconForge** | Recon | `recon/reconforge/` | Subdomain enumeration, host discovery, URL scraping, whois |
+| **JSHunter** | Recon | `recon/jshunter/` | JavaScript analysis — endpoint extraction, GraphQL, storage, frameworks |
+| **GitHubRecon** | Recon | `recon/github_recon/` | GitHub secret/credential leak search |
+| **AttackSurfaceMapper** | Recon | `recon/attacksurfacemapper/` | Endpoint classification & attack surface graph visualization |
+| **ScanForge** | Scan | `scan/scanforge/` | Automated nmap + nuclei scanning |
+| **ReportHub** | Report | `report/reporthub/` | Unified HTML/JSON report & interactive dashboard |
+| **Pipeline** | Orchestration | `pipeline.py` | Run all 7 tools sequentially with one command |
+
+---
+
+## Quick Start
 
 ```bash
-# 1. Install semua dependency (cukup sekali)
+# 1. One-command install (creates .venv, installs all deps)
 ./install.sh
 
-# 2. Aktifkan virtual environment
+# 2. Activate virtual environment
 source .venv/bin/activate      # Linux / macOS
 .venv\Scripts\activate         # Windows CMD
 
-# 3. Jalankan pipeline untuk target
+# 3. Run pipeline (step-by-step prompts by default)
 python pipeline.py -d example.com
 
-# Atau jalankan tool secara individual
+# 4. Or run tools individually
 python recon/reconforge/recon.py -d example.com --all --json
 ```
 
 ---
 
-## 🔧 Instalasi Detail
+## Installation
 
-### Persyaratan
+### Requirements
 
 - **Python 3.10+**
-- Koneksi internet
-- (Opsional) `nmap` & `nuclei` di PATH untuk ScanForge
+- Internet connection
+- (Optional) `nmap` & `nuclei` in PATH for ScanForge
+- (Optional) `GITHUB_TOKEN` env var for GitHubRecon (5000 req/hr vs 60 unauthenticated)
 
-### Cara Kerja Installer (`./install.sh`)
+### Installer (`./install.sh`)
 
-| Tahap | Aksi |
-|---|---|
-| 1/5 | Validasi Python 3.10+ |
-| 2/5 | Membuat `.venv` di root (skip jika sudah ada) |
-| 3/5 | Upgrade pip ke versi terbaru |
-| 4/5 | Install dependencies dari `requirements/*.txt` |
-| 5/5 | Verifikasi semua import berhasil |
+| Step | Action |
+|------|--------|
+| 1/5 | Validate Python 3.10+ |
+| 2/5 | Create `.venv` at project root (skips if exists) |
+| 3/5 | Upgrade pip to latest |
+| 4/5 | Install all dependencies from `requirements/*.txt` |
+| 5/5 | Verify all imports succeed |
 
-Semua output muncul di terminal.
-
-### Struktur Dependency
+### Dependency Structure
 
 ```
 requirements/
@@ -69,20 +68,62 @@ requirements/
 └── reporthub.txt            # rich, jinja2, pandas, plotly, matplotlib
 ```
 
-> **Catatan**: ScanForge & EngageForge hanya menggunakan stdlib — tidak perlu installasi tambahan.
+> **Note**: ScanForge & EngageForge use stdlib only — no additional dependencies.
 
 ---
 
-## 🧪 Penggunaan Per Tool
+## Pipeline
 
-### EngageForge — Setup Struktur Folder
+Run all tools in sequence with a single command. By default, prompts before each step.
+
+```bash
+python pipeline.py -d example.com          # step-by-step (recommended)
+python pipeline.py -d example.com --yes     # auto-run all, no prompts
+python pipeline.py -d example.com -s        # create folder structure only
+python pipeline.py -d example.com -o /path  # custom output directory
+```
+
+### Output Structure
+
+```
+workspace/{domain}/
+├── recon/        ← ReconForge (subdomains, hosts, urls, whois)
+├── github/       ← GitHubRecon (secrets, leaks, repos)
+├── jshunter/     ← JSHunter (endpoints, graphql, frameworks)
+├── asm/          ← AttackSurfaceMapper (report.json, graph)
+├── scan/         ← ScanForge (nmap + nuclei)
+└── report/       ← ReportHub (dashboard, report)
+```
+
+### Flags
+
+| Flag | Description |
+|------|-------------|
+| `-d DOMAIN` | Target domain (required) |
+| `-o DIR` | Custom output directory (default: `workspace/{domain}`) |
+| `-s` | Structure mode — create empty folder tree, no tools |
+| `--yes` | Run all steps without prompting |
+| `--skip-recon` | Skip ReconForge |
+| `--skip-github` | Skip GitHubRecon |
+| `--skip-jshunter` | Skip JSHunter |
+| `--skip-asm` | Skip AttackSurfaceMapper |
+| `--skip-scanforge` | Skip ScanForge |
+| `--skip-reporthub` | Skip ReportHub |
+| `--version` | Show version |
+
+---
+
+## Tool Reference
+
+### EngageForge — Structure Generator
 
 ```bash
 python setup/engageforge/engageforge.py -t example.com
 python setup/engageforge/engageforge.py -t example.com -o ~/projects
+python setup/engageforge/engageforge.py -t example.com --pipeline
 ```
 
-Generate folder structure untuk engagement pentest.
+Generates engagement folder structure with `.env` metadata and `notes.md` template.
 
 ### ReconForge — Subdomain & Host Discovery
 
@@ -91,9 +132,9 @@ python recon/reconforge/recon.py -d example.com --all --json --html
 python recon/reconforge/recon.py -d example.com --subdomains --whois
 ```
 
-Output: subdomains, live host, all URLs, whois info → `output/{domain}/`
+**Modules**: subdomains (crt.sh, AlienVault, Shodan, SecurityTrails, LeakIX, URLScan, Sublist3r, Subfinder, Assetfinder, Amass + DNS brute-force), live hosts (dnsx, Shodan), URLs (AlienVault OTX, gau, waybackurls, katana, httpx), whois (python-whois, system whois fallback).
 
-### JSHunter — Analisis JavaScript
+### JSHunter — JavaScript Analysis
 
 ```bash
 python recon/jshunter/jshunter.py -u https://example.com/app.js
@@ -102,30 +143,29 @@ python recon/jshunter/jshunter.py -i output/example.com
 python recon/jshunter/jshunter.py -d ./static/js
 ```
 
-Mendeteksi: endpoint API, path GraphQL, WebSocket, storage (localStorage/indexedDB), framework, keyword sensitif.
+**Detection**: API endpoints, GraphQL paths, WebSocket URLs, storage (localStorage/indexedDB), framework signatures, sensitive keywords, secrets.
 
-### GitHubRecon — Pencarian Secret/Leak
+### GitHubRecon — Secret/Leak Search
 
 ```bash
-python recon/github_recon/github_recon.py -d example.com --json
-set GITHUB_TOKEN=ghp_xxx  # Windows CMD
-export GITHUB_TOKEN=ghp_xxx  # Linux/macOS
+set GITHUB_TOKEN=ghp_xxx       # Windows CMD
+export GITHUB_TOKEN=ghp_xxx    # Linux/macOS
 python recon/github_recon/github_recon.py -d example.com --json
 ```
 
-Cari secret, API key, credential yang ter-expose di GitHub.
+Token is read from `GITHUB_TOKEN` environment variable only — never accepted via CLI. Searches for exposed secrets, API keys, credentials, internal paths, and config files on GitHub.
 
-### AttackSurfaceMapper — Klasifikasi & Visualisasi
+### AttackSurfaceMapper — Classification & Visualization
 
 ```bash
 python recon/attacksurfacemapper/asm.py -i path/to/input --all
 python recon/attacksurfacemapper/asm.py -i path/to/input --html --graph
 ```
 
-Input: `subdomains.txt`, `live.txt`, `all_urls.txt`, `endpoints.txt`, dll.
-Output: report HTML, grafik attack surface.
+**Input**: `subdomains.txt`, `hosts.txt`, `urls.txt`, `endpoints.txt`, `graphql.txt`, `websockets.txt`, `frameworks.txt`, `secrets.txt`, etc.  
+**Output**: Classified endpoints per category, attack surface graph (NetworkX/Matplotlib), HTML/JSON report.
 
-### ScanForge — Pemindaian Otomatis
+### ScanForge — Automated Scanning
 
 ```bash
 python scan/scanforge/scanforge.py -i output/example.com --dry-run
@@ -133,103 +173,82 @@ python scan/scanforge/scanforge.py -i output/example.com -p full
 python scan/scanforge/scanforge.py -f targets.txt
 ```
 
-Membutuhkan `nmap` dan `nuclei` terinstall di sistem.
+**Profiles**: `quick` (top ports), `basic` (SYN + version), `full` (all ports), `service` (+ scripts), `vuln` (vulnerability scripts).  
+Requires `nmap` and `nuclei` installed on the system.
 
-### ReportHub — Dashboard & Laporan
+### ReportHub — Unified Reporting
 
 ```bash
 python report/reporthub/reporthub.py -i workspace/example.com --all
 python report/reporthub/reporthub.py -i workspace/example.com --dashboard
 ```
 
-Generate dashboard interaktif (Plotly) + laporan HTML/JSON.
+Aggregates output from all tools and generates: interactive Plotly dashboard, HTML report, JSON export, summary statistics.
 
 ---
 
-## ⚙️ Pipeline
+## Environment Variables
 
-Menjalankan 6 tool secara otomatis dengan 1 perintah:
+| Variable | Purpose | Required |
+|----------|---------|----------|
+| `GITHUB_TOKEN` | GitHub API token for GitHubRecon | Recommended (rate limit: 5000 vs 60 req/hr) |
+| `SHODAN_KEY` | Shodan API key for ReconForge | Optional |
+| `SECURITYTRAILS_KEY` | SecurityTrails API key | Optional |
+| `ALIENVAULT_KEY` | AlienVault OTX API key | Optional |
+| `LEAKIX_KEY` | LeakIX API key | Optional |
+| `URLSCAN_KEY` | URLScan.io API key | Optional |
 
-```bash
-python pipeline.py -d example.com
-python pipeline.py -d example.com --skip-recon --skip-jshunter
-python pipeline.py -d example.com --skip-scanforge --skip-reporthub
-python pipeline.py --help
-```
-
-### Struktur Output
-
-```
-workspace/{domain}/
-├── recon/        ← ReconForge (subdomains, hosts, urls, whois)
-├── jshunter/     ← JSHunter (endpoints, graphql, frameworks, dll)
-├── asm/          ← AttackSurfaceMapper (report.json, attack_surface.png)
-├── scan/         ← ScanForge (nmap + nuclei)
-└── report/       ← ReportHub (dashboard.html, report.json)
-```
-
-### Flags
-
-| Flag | Fungsi |
-|---|---|
-| `--skip-recon` | Skip ReconForge |
-| `--skip-jshunter` | Skip JSHunter |
-| `--skip-asm` | Skip AttackSurfaceMapper |
-| `--skip-scanforge` | Skip ScanForge |
-| `--skip-reporthub` | Skip ReportHub |
+Create a `.env` file in the project root — all tools auto-load it via `lib/dotenv.py`.
 
 ---
 
-## ❗ Troubleshooting
-
-| Masalah | Solusi |
-|---|---|
-| `./install.sh` gagal | Pastikan Python 3.10+ terinstall & tersedia di PATH |
-| Output kosong | Periksa target valid & dalam scope yang diizinkan |
-| GitHubRecon rate limit | Set environment variable `GITHUB_TOKEN=ghp_xxx` (limit 5000 req/jam) |
-| ScanForge gagal | Install nmap (`sudo apt install nmap`) & nuclei |
-| Module not found | Jalankan `pip install -r requirements/all.txt` |
-| File input tidak ditemukan | Periksa path dan izin baca/tulis direktori |
-
----
-
-## 🧹 Struktur Direktori Lengkap
+## Directory Structure
 
 ```
 BugBountySuite/
-├── install.sh
-├── pipeline.py
+├── install.sh                # One-command installer
+├── pipeline.py               # Full pipeline orchestrator
 ├── requirements/
-│   ├── all.txt
+│   ├── all.txt               # All dependencies combined
 │   ├── reconforge.txt
 │   ├── jshunter.txt
 │   ├── github_recon.txt
 │   ├── attacksurfacemapper.txt
 │   └── reporthub.txt
-├── .venv/              # Virtual environment (auto-generated)
-
-├── output/             # Output per tool
-├── workspace/          # Output pipeline terpadu
-├── reports/            # Laporan final
+├── lib/                      # Shared library
+│   ├── dotenv.py             # .env file loader
+│   ├── logger.py             # Console logger
+│   └── utils.py              # Common utilities
+├── setup/engageforge/
 ├── recon/
 │   ├── reconforge/
 │   ├── jshunter/
 │   ├── github_recon/
 │   └── attacksurfacemapper/
-├── scan/
-│   └── scanforge/
-├── report/
-│   └── reporthub/
-└── setup/
-    └── engageforge/
+├── scan/scanforge/
+└── report/reporthub/
 ```
 
 ---
 
-## 📄 Lisensi
+## Troubleshooting
 
-Lihat [LICENSE](LICENSE).
+| Problem | Solution |
+|---------|----------|
+| `./install.sh` fails | Ensure Python 3.10+ is installed and in PATH |
+| Empty output | Verify the target is valid and in-scope |
+| GitHubRecon rate limited | Set `GITHUB_TOKEN` environment variable |
+| ScanForge fails | Install nmap (`sudo apt install nmap`) and nuclei |
+| Module not found | Run `pip install -r requirements/all.txt` |
+| Input file not found | Check path and directory read/write permissions |
+| `Invalid IPv6 URL` error | Fixed — malformed URLs are now handled gracefully |
 
 ---
 
-> **Penulis**: [brynnnn12](https://github.com/brynnnn12) — Gunakan alat ini hanya pada target yang sah dan berizin.
+## License
+
+See [LICENSE](LICENSE).
+
+---
+
+> **Author**: [brynnnn12](https://github.com/brynnnn12) — Use this toolkit only on authorized targets.

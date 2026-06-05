@@ -4,9 +4,15 @@ import argparse
 import logging
 import subprocess
 import sys
+from pathlib import Path
+
+# Ensure project root is on sys.path for lib/ imports
+_PROJECT_ROOT = str(Path(__file__).resolve().parent.parent.parent)
+if _PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, _PROJECT_ROOT)
+
 import lib.logger  # noqa: F401 — configures root logger
 from datetime import datetime
-from pathlib import Path
 from typing import Dict, List, Tuple
 
 AUTHOR = "brynnnn12"
@@ -32,8 +38,8 @@ BANNER = f"""
 \u2551   B   B  R  R     Y    N  NN  N  NN  N  NN  N  NN                    \u2551
 \u2551   BBBB   R   R    Y    N   N  N   N  N   N  N   N                    \u2551
 \u2551                                                                      \u2551
-\u2551   EngageForge v{{VERSION:<5}}  Pentest engagement folder generator   \u2551
-\u2551   {{AUTHOR}}                                                         \u2551
+\u2551   EngageForge v{VERSION:<5}  Pentest engagement folder generator            \u2551
+\u2551   {AUTHOR:<67}\u2551
 \u2551                                                                      \u2551
 \u255a\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255d
 """
