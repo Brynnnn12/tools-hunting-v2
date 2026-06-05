@@ -14,25 +14,25 @@ Search GitHub for leaked secrets, credentials, and sensitive information related
 ## Installation
 
 ```bash
-python -m venv .venv
-# Linux/Mac: source .venv/bin/activate
-# Windows:   .venv\Scripts\activate
-pip install -r requirements.txt
+# From root project:
+./install.sh
+source .venv/bin/activate
 ```
 
 ## Usage
 
 ```bash
-python github_recon.py -h
+export GITHUB_TOKEN=ghp_xxxxx  # Linux/macOS
+set GITHUB_TOKEN=ghp_xxxxx     # Windows CMD
+
 python github_recon.py -d example.com
 python github_recon.py -d example.com --json
-python github_recon.py -d example.com --token ghp_xxxxx --json
-python github_recon.py -f domains.txt --token ghp_xxxxx
+python github_recon.py -f domains.txt --json
 python github_recon.py --version
 ```
 
-Without `--token`: limited to 60 requests/hour, repo + commit search only.
-With `--token`: 5000 requests/hour, enables code + issue search.
+**Without `GITHUB_TOKEN`:** limited to 60 requests/hour, repo + commit search only.
+**With `GITHUB_TOKEN`:** 5000 requests/hour, enables code + issue search.
 
 ## Output
 
@@ -40,8 +40,8 @@ With `--token`: 5000 requests/hour, enables code + issue search.
 output/example.com/
   repos.txt        — repositories mentioning the domain
   commits.txt      — commits mentioning the domain
-  code.txt         — code snippets (requires --token)
-  issues.txt       — issues mentioning the domain (requires --token)
+  code.txt         — code snippets (requires GITHUB_TOKEN)
+  issues.txt       — issues mentioning the domain (requires GITHUB_TOKEN)
   emails.txt       — extracted email addresses
   secrets.txt      — detected secret patterns
   report.json      — summary (requires --json)

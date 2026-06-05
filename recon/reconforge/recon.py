@@ -167,8 +167,8 @@ def main() -> int:
         version=VERSION,
     )
 
-    from core.config import find_and_load_dotenv
-    find_and_load_dotenv()
+    from lib.dotenv import find_and_load_dotenv
+    find_and_load_dotenv([config.output_root])
 
     console = Console()
     console.print(f"[bold cyan]{BANNER}[/bold cyan]")

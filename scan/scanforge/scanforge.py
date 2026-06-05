@@ -2,13 +2,13 @@ from __future__ import annotations
 
 import argparse
 import json
-import re
+import logging
+import shutil
 import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
-
 
 AUTHOR = "brynnnn12"
 VERSION = "1.0"
@@ -19,10 +19,10 @@ BANNER = f"""
   \\___ \\ / __/ _` | '_ ` _ \\| |_ / _ \\| '__| '__| | | |
    ___) | (_| (_| | | | | | |  _| (_) | |  | |  | |_| |
   |____/ \\___\\__,_|_| |_| |_|_|  \\___/|_|  |_|   \\__, |
-                                                   |___/
+                                                    |___/
 
-  ScanForge v{VERSION}  —  {AUTHOR}
-  Automated scanner wrapper — nmap + nuclei
+  ScanForge v{VERSION}  \u2014  {AUTHOR}
+  Automated scanner wrapper \u2014 nmap + nuclei
 """
 
 NMAP_PROFILES: Dict[str, List[str]] = {
@@ -94,7 +94,6 @@ tr:nth-child(even){background:#161b22}
 
 
 def find_external(name: str) -> Optional[str]:
-    import shutil
     return shutil.which(name)
 
 
@@ -111,19 +110,15 @@ def read_targets(path: Path) -> List[str]:
 
 def gather_targets(input_dir: Path, targets_file: Optional[Path]) -> List[str]:
     targets: List[str] = []
-
     if targets_file and targets_file.exists():
         targets.extend(read_targets(targets_file))
         return targets
-
     if not input_dir.exists():
         return targets
-
     for name in ["hosts.txt", "live.txt", "subdomains.txt"]:
         path = input_dir / name
         if path.exists():
             targets.extend(read_targets(path))
-
     return sorted(set(t.strip().lower() for t in targets if t.strip()))
 
 
@@ -131,19 +126,14 @@ def run_nmap(targets: List[str], profile: str, output_dir: Path) -> Tuple[int, O
     nmap = find_external("nmap")
     if not nmap:
         return 1, None
-
     targets_file = output_dir / "_nmap_targets.txt"
     targets_file.write_text("\n".join(targets), encoding="utf-8")
-
     xml_out = output_dir / "nmap_output.xml"
     flags = NMAP_PROFILES.get(profile, NMAP_PROFILES["basic"])
-
     cmd = [nmap, "-oX", str(xml_out)] + flags + ["-iL", str(targets_file)]
     result = subprocess.run(cmd, capture_output=True, text=True)
-
     if result.returncode != 0:
         return result.returncode, None
-
     return 0, xml_out if xml_out.exists() else None
 
 
@@ -152,25 +142,21 @@ def parse_nmap_xml(xml_path: Path) -> List[Dict]:
     hosts: List[Dict] = []
     if not xml_path or not xml_path.exists():
         return hosts
-
     try:
         root = ET.parse(str(xml_path)).getroot()
     except ET.ParseError:
         return hosts
-
     for host in root.findall("host"):
         ip_el = host.find("address")
         if ip_el is None:
             continue
         ip = ip_el.get("addr", "")
-
         hostnames = host.find("hostnames")
         hostname = ""
         if hostnames is not None:
             hn = hostnames.find("hostname")
             if hn is not None:
                 hostname = hn.get("name", "")
-
         ports: List[Dict] = []
         ports_el = host.find("ports")
         if ports_el is not None:
@@ -188,9 +174,7 @@ def parse_nmap_xml(xml_path: Path) -> List[Dict]:
                     "port": port_id, "protocol": protocol,
                     "state": state, "service": svc, "version": version.strip(),
                 })
-
         hosts.append({"ip": ip, "hostname": hostname, "ports": ports})
-
     return hosts
 
 
@@ -198,7 +182,6 @@ def run_nuclei(targets: List[str], output_dir: Path, templates: str = "", templa
     nuclei = find_external("nuclei")
     if not nuclei:
         return 1, None
-
     json_out = output_dir / "nuclei_output.jsonl"
     cmd = [nuclei, "-jsonl", "-o", str(json_out)]
     cmd += ["-l", str(output_dir / "_nmap_targets.txt")]
@@ -206,12 +189,9 @@ def run_nuclei(targets: List[str], output_dir: Path, templates: str = "", templa
         cmd += ["-t", templates]
     if templates_dir:
         cmd += ["-tp", templates_dir]
-
     result = subprocess.run(cmd, capture_output=True, text=True)
-
     if result.returncode not in (0, 1):
         return result.returncode, None
-
     return 0, json_out if json_out.exists() else None
 
 
@@ -219,7 +199,6 @@ def parse_nuclei_jsonl(jsonl_path: Path) -> List[Dict]:
     findings: List[Dict] = []
     if not jsonl_path or not jsonl_path.exists():
         return findings
-
     for line in jsonl_path.read_text(encoding="utf-8", errors="ignore").splitlines():
         line = line.strip()
         if not line:
@@ -236,7 +215,6 @@ def parse_nuclei_jsonl(jsonl_path: Path) -> List[Dict]:
             "host": obj.get("host", ""),
             "matched": obj.get("matched-at", ""),
         })
-
     return findings
 
 
@@ -249,7 +227,6 @@ def generate_report(
     write_html: bool = True,
 ) -> None:
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
     if write_json:
         report = {
             "target": target,
@@ -268,7 +245,6 @@ def generate_report(
         (output_dir / "report.json").write_text(
             json.dumps(report, indent=2), encoding="utf-8"
         )
-
     if write_html:
         from string import Template
         t = Template(REPORT_HTML)
@@ -282,165 +258,170 @@ def generate_report(
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(
-        prog="scanforge.py",
-        description="Automated scanner wrapper — nmap + nuclei",
-        epilog=(
-            "Examples:\n"
-            "  python scanforge.py -i recon/output/example.com\n"
-            "  python scanforge.py -f targets.txt -p full\n"
-            "  python scanforge.py -i ../reconforge/output/example.com --nmap-only\n"
-            "  python scanforge.py -i ../reconforge/output/example.com --yes\n"
-            "  python scanforge.py -i input --dry-run\n"
-            "  # Interactive (default): prompts for nmap/nuclei choice\n\n"
-            "Nmap profiles:\n"
-            "  quick    -T4 -F (top ports)\n"
-            "  basic    -T4 -sS -sV (SYN + version)\n"
-            "  full     -T4 -sS -sV -p- (all ports)\n"
-            "  service  -T4 -sS -sV -sC (default scripts)\n"
-            "  vuln     -T4 -sS -sV --script=vuln (vuln scripts)\n\n"
-            "Nuclei categories:\n"
-            "  all             All templates\n"
-            "  cve             CVEs\n"
-            "  exposures       Exposures\n"
-            "  misconfig       Misconfiguration\n"
-            "  vulnerabilities  Vulnerabilities\n"
-            "  technologies    Technology detection\n"
-            "  default-login   Default logins\n"
-            "  fuzzing         Fuzzing\n\n"
-            "Use --nuclei-dir to point to custom templates path, e.g.\n"
-            "  python scanforge.py -i input --nuclei-dir ~/nuclei-templates\n\n"
-            "Author: brynnnn12  |  https://github.com/brynnnn12"
-        ),
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-    )
-    parser.add_argument("-i", "--input", help="ReconForge output directory (reads hosts.txt, live.txt, subdomains.txt)")
-    parser.add_argument("-f", "--file", help="Targets file (one per line, overrides -i)")
-    parser.add_argument("-o", "--output", default="output", help="Output directory (default: output)")
-    parser.add_argument("-p", "--profile", default="basic", choices=list(NMAP_PROFILES.keys()), help="nmap scan profile (default: basic)")
-    parser.add_argument("--nmap-only", action="store_true", help="Run nmap only (no prompts)")
-    parser.add_argument("--nuclei-only", action="store_true", help="Run nuclei only (no prompts)")
-    parser.add_argument("--nuclei-category", default="all", choices=list(NUCLEI_CATEGORIES.keys()), help="nuclei template category (default: all)")
-    parser.add_argument("--nuclei-dir", default="", help="Custom nuclei templates directory (e.g. ~/nuclei-templates)")
-    parser.add_argument("--yes", action="store_true", help="Run all scanners (no prompts)")
-    parser.add_argument("--dry-run", action="store_true", help="Show targets and config, don't scan")
-    parser.add_argument("--no-json", action="store_true", help="Skip JSON report")
-    parser.add_argument("--no-html", action="store_true", help="Skip HTML report")
-    parser.add_argument("--version", action="version", version=f"ScanForge v{VERSION} — {AUTHOR}")
-    args = parser.parse_args()
+    try:
+        parser = argparse.ArgumentParser(
+            prog="scanforge.py",
+            description="Automated scanner wrapper \u2014 nmap + nuclei",
+            epilog=(
+                "Examples:\n"
+                "  python scanforge.py -i recon/output/example.com\n"
+                "  python scanforge.py -f targets.txt -p full\n"
+                "  python scanforge.py -i ../reconforge/output/example.com --nmap-only\n"
+                "  python scanforge.py -i ../reconforge/output/example.com --yes\n"
+                "  python scanforge.py -i input --dry-run\n"
+                "  # Interactive (default): prompts for nmap/nuclei choice\n\n"
+                "Nmap profiles:\n"
+                "  quick    -T4 -F (top ports)\n"
+                "  basic    -T4 -sS -sV (SYN + version)\n"
+                "  full     -T4 -sS -sV -p- (all ports)\n"
+                "  service  -T4 -sS -sV -sC (default scripts)\n"
+                "  vuln     -T4 -sS -sV --script=vuln (vuln scripts)\n\n"
+                "Nuclei categories:\n"
+                "  all             All templates\n"
+                "  cve             CVEs\n"
+                "  exposures       Exposures\n"
+                "  misconfig       Misconfiguration\n"
+                "  vulnerabilities  Vulnerabilities\n"
+                "  technologies    Technology detection\n"
+                "  default-login   Default logins\n"
+                "  fuzzing         Fuzzing\n\n"
+                "Use --nuclei-dir to point to custom templates path, e.g.\n"
+                "  python scanforge.py -i input --nuclei-dir ~/nuclei-templates\n\n"
+                "Author: brynnnn12  |  https://github.com/brynnnn12"
+            ),
+            formatter_class=argparse.RawDescriptionHelpFormatter,
+        )
+        parser.add_argument("-i", "--input", help="ReconForge output directory (reads hosts.txt, live.txt, subdomains.txt)")
+        parser.add_argument("-f", "--file", help="Targets file (one per line, overrides -i)")
+        parser.add_argument("-o", "--output", default="output", help="Output directory (default: output)")
+        parser.add_argument("-p", "--profile", default="basic", choices=list(NMAP_PROFILES.keys()), help="nmap scan profile (default: basic)")
+        parser.add_argument("--nmap-only", action="store_true", help="Run nmap only (no prompts)")
+        parser.add_argument("--nuclei-only", action="store_true", help="Run nuclei only (no prompts)")
+        parser.add_argument("--nuclei-category", default="all", choices=list(NUCLEI_CATEGORIES.keys()), help="nuclei template category (default: all)")
+        parser.add_argument("--nuclei-dir", default="", help="Custom nuclei templates directory (e.g. ~/nuclei-templates)")
+        parser.add_argument("--yes", action="store_true", help="Run all scanners (no prompts)")
+        parser.add_argument("--dry-run", action="store_true", help="Show targets and config, don't scan")
+        parser.add_argument("--no-json", action="store_true", help="Skip JSON report")
+        parser.add_argument("--no-html", action="store_true", help="Skip HTML report")
+        parser.add_argument("--version", action="version", version=f"ScanForge v{VERSION} \u2014 {AUTHOR}")
+        args = parser.parse_args()
 
-    if not args.input and not args.file:
-        parser.print_help()
-        return 1
+        if not args.input and not args.file:
+            parser.print_help()
+            return 1
 
-    output_dir = Path(args.output).resolve()
-    output_dir.mkdir(parents=True, exist_ok=True)
+        output_dir = Path(args.output).resolve()
+        output_dir.mkdir(parents=True, exist_ok=True)
 
-    input_dir = Path(args.input).resolve() if args.input else Path()
-    targets_file = Path(args.file).resolve() if args.file else None
+        input_dir = Path(args.input).resolve() if args.input else Path()
+        targets_file = Path(args.file).resolve() if args.file else None
+        targets = gather_targets(input_dir, targets_file)
 
-    targets = gather_targets(input_dir, targets_file)
+        if not targets:
+            print("[!] No targets found")
+            return 1
 
-    if not targets:
-        print("[!] No targets found")
-        return 1
+        print(BANNER)
+        print(f"  Output: {output_dir}")
+        print(f"  Targets ({len(targets)}): {', '.join(targets[:10])}{' ...' if len(targets) > 10 else ''}")
+        print(f"  Profile: {args.profile}")
+        nmap_ok, nuclei_ok = find_external('nmap'), find_external('nuclei')
+        print(f"  nmap:      {'[yes]' if nmap_ok else '[no] (not installed)'}")
+        print(f"  nuclei:    {'[yes]' if nuclei_ok else '[no] (not installed)'}")
+        print(f"  nuclei cat: {args.nuclei_category}")
+        print(f"  nuclei dir: {args.nuclei_dir or '(nuclei default)'}")
+        print()
 
-    print(BANNER)
-    print(f"  Output: {output_dir}")
-    print(f"  Targets ({len(targets)}): {', '.join(targets[:10])}{' ...' if len(targets) > 10 else ''}")
-    print(f"  Profile: {args.profile}")
-    print(f"  nmap:      {'✓' if find_external('nmap') else '✗ (not installed)'}")
-    print(f"  nuclei:    {'✓' if find_external('nuclei') else '✗ (not installed)'}")
-    print(f"  nuclei cat: {args.nuclei_category}")
-    if args.nuclei_dir:
-        print(f"  nuclei dir: {args.nuclei_dir}")
-    else:
-        print(f"  nuclei dir: (nuclei default)")
-    print()
+        nmap_results: List[Dict] = []
+        nuclei_results: List[Dict] = []
+        run_nmap_flag = False
+        run_nuclei_flag = False
 
-    nmap_results: List[Dict] = []
-    nuclei_results: List[Dict] = []
-    run_nmap_flag = False
-    run_nuclei_flag = False
-
-    if args.nmap_only:
-        run_nmap_flag = True
-    elif args.nuclei_only:
-        run_nuclei_flag = True
-    elif args.yes:
-        run_nmap_flag = True
-        run_nuclei_flag = True
-    else:
-        p = input(f"  Jalankan nmap? [Y/n]: ").strip().lower()
-        if p in ("", "y", "yes"):
+        if args.nmap_only:
             run_nmap_flag = True
-            prof = input(f"  Profile nmap [{args.profile}]: ").strip()
-            if prof in NMAP_PROFILES:
-                args.profile = prof
-        p = input(f"  Jalankan nuclei? [Y/n]: ").strip().lower()
-        if p in ("", "y", "yes"):
+        elif args.nuclei_only:
             run_nuclei_flag = True
-            cat_opts = ", ".join(NUCLEI_CATEGORIES.keys())
-            cat = input(f"  Template nuclei [all] ({cat_opts}): ").strip()
-            if cat in NUCLEI_CATEGORIES:
-                args.nuclei_category = cat
-            td = input(f"  Direktori templates (enter jika default): ").strip()
-            if td:
-                args.nuclei_dir = td
+        elif args.yes:
+            run_nmap_flag = True
+            run_nuclei_flag = True
+        else:
+            p = input("  Run nmap? [Y/n]: ").strip().lower()
+            if p in ("", "y", "yes"):
+                run_nmap_flag = True
+                prof = input(f"  nmap profile [{args.profile}]: ").strip()
+                if prof in NMAP_PROFILES:
+                    args.profile = prof
+            p = input("  Run nuclei? [Y/n]: ").strip().lower()
+            if p in ("", "y", "yes"):
+                run_nuclei_flag = True
+                cat_opts = ", ".join(NUCLEI_CATEGORIES.keys())
+                cat = input(f"  nuclei category [all] ({cat_opts}): ").strip()
+                if cat in NUCLEI_CATEGORIES:
+                    args.nuclei_category = cat
+                td = input("  Templates directory (enter for default): ").strip()
+                if td:
+                    args.nuclei_dir = td
 
-    if args.dry_run:
-        will = []
-        if run_nmap_flag: will.append("nmap")
+        if args.dry_run:
+            will = []
+            if run_nmap_flag: will.append("nmap")
+            if run_nuclei_flag:
+                label = f"nuclei ({args.nuclei_category})"
+                if args.nuclei_dir:
+                    label += f" dir={args.nuclei_dir}"
+                will.append(label)
+            print(f"  Will run: {', '.join(will) if will else '(none)'}")
+            print("  [DRY-RUN] Targets ready \u2014 no scan performed\n")
+            return 0
+
+        if run_nmap_flag:
+            nmap_bin = find_external("nmap")
+            if nmap_bin:
+                print(f"\n  \u2500\u2500 Running nmap ({args.profile}) \u2500\u2500")
+                rc, xml_path = run_nmap(targets, args.profile, output_dir)
+                if rc == 0 and xml_path:
+                    nmap_results = parse_nmap_xml(xml_path)
+                    ports = sum(len(h["ports"]) for h in nmap_results)
+                    print(f"    nmap done: {len(nmap_results)} hosts, {ports} open ports\n")
+                else:
+                    print(f"    [!] nmap failed (exit {rc})\n")
+            else:
+                print("  [!] nmap not found \u2014 skipping\n")
+
         if run_nuclei_flag:
-            label = f"nuclei ({args.nuclei_category})"
-            if args.nuclei_dir:
-                label += f" dir={args.nuclei_dir}"
-            will.append(label)
-        print(f"  Will run: {', '.join(will) if will else '(none)'}")
-        print("  [DRY-RUN] Targets ready — no scan performed\n")
+            nuclei_bin = find_external("nuclei")
+            if nuclei_bin:
+                cat_label = args.nuclei_category
+                cat_path = NUCLEI_CATEGORIES.get(cat_label, "")
+                print(f"  \u2500\u2500 Running nuclei ({cat_label}) \u2500\u2500")
+                rc, jsonl_path = run_nuclei(targets, output_dir, templates=cat_path, templates_dir=args.nuclei_dir)
+                if rc == 0 and jsonl_path:
+                    nuclei_results = parse_nuclei_jsonl(jsonl_path)
+                    print(f"    nuclei done: {len(nuclei_results)} findings\n")
+                else:
+                    print(f"    [!] nuclei failed or no results\n")
+            else:
+                print("  [!] nuclei not found \u2014 skipping\n")
+
+        generate_report(
+            target=input_dir.name or Path(args.file or "unknown").stem,
+            nmap_results=nmap_results,
+            nuclei_results=nuclei_results,
+            output_dir=output_dir,
+            write_json=not args.no_json,
+            write_html=not args.no_html,
+        )
+
+        print(f"  \u2500\u2500 Done \u2500\u2500")
+        print(f"  Reports: {output_dir}")
         return 0
-
-    if run_nmap_flag:
-        nmap_bin = find_external("nmap")
-        if nmap_bin:
-            print(f"\n  ── Running nmap ({args.profile}) ──")
-            rc, xml_path = run_nmap(targets, args.profile, output_dir)
-            if rc == 0 and xml_path:
-                nmap_results = parse_nmap_xml(xml_path)
-                ports = sum(len(h["ports"]) for h in nmap_results)
-                print(f"    nmap done: {len(nmap_results)} hosts, {ports} open ports\n")
-            else:
-                print(f"    [!] nmap failed (exit {rc})\n")
-        else:
-            print("  [!] nmap not found — skipping\n")
-
-    if run_nuclei_flag:
-        nuclei_bin = find_external("nuclei")
-        if nuclei_bin:
-            cat_label = args.nuclei_category
-            cat_path = NUCLEI_CATEGORIES.get(cat_label, "")
-            print(f"  ── Running nuclei ({cat_label}) ──")
-            rc, jsonl_path = run_nuclei(targets, output_dir, templates=cat_path, templates_dir=args.nuclei_dir)
-            if rc == 0 and jsonl_path:
-                nuclei_results = parse_nuclei_jsonl(jsonl_path)
-                print(f"    nuclei done: {len(nuclei_results)} findings\n")
-            else:
-                print(f"    [!] nuclei failed or no results\n")
-        else:
-            print("  [!] nuclei not found — skipping\n")
-
-    generate_report(
-        target=input_dir.name or Path(args.file or "unknown").stem,
-        nmap_results=nmap_results,
-        nuclei_results=nuclei_results,
-        output_dir=output_dir,
-        write_json=not args.no_json,
-        write_html=not args.no_html,
-    )
-
-    print(f"  ── Done ──")
-    print(f"  Reports: {output_dir}")
-    return 0
+    except (KeyboardInterrupt, EOFError):
+        print("\n  [!] Interrupted")
+        return 130
+    except Exception as exc:
+        logging.exception("ScanForge failed")
+        print(f"\n  [red]Error:[/red] {exc}")
+        return 1
 
 
 if __name__ == "__main__":

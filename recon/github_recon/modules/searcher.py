@@ -65,7 +65,7 @@ class Searcher:
                 if resp.status_code == 401:
                     msg = _json(resp).get("message", "")
                     if "requires" in msg.lower():
-                        self._log(f"  ~ Auth required for {path} — skipping (use --token)")
+                        self._log(f"  ~ Auth required for {path} — skipping (set GITHUB_TOKEN)")
                         return None
                     self._log(f"  ~ 401: {msg}")
                     return None
@@ -77,7 +77,7 @@ class Searcher:
                         time.sleep(self.sleep_on_limit)
                         continue
                     if not self.token and ("code search" in body or "must have" in body):
-                        self._log("  ~ Code search requires authentication (use --token)")
+                        self._log("  ~ Code search requires authentication (set GITHUB_TOKEN)")
                         self.has_code_access = False
                         return None
                     msg = _json(resp).get("message", "")

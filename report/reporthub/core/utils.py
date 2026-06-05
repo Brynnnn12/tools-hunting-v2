@@ -1,10 +1,9 @@
-from __future__ import annotations
-
-from dataclasses import dataclass
-from datetime import datetime
-from pathlib import Path
-from typing import Iterable, List
 import json
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Iterable, List, Set
+
+from lib.utils import ensure_dir, now_timestamp, read_lines  # noqa: F401
 
 
 @dataclass
@@ -12,26 +11,6 @@ class InputPaths:
     recon_dir: Path
     jshunter_dir: Path
     asm_dir: Path
-
-
-def ensure_dir(path: Path) -> None:
-    path.mkdir(parents=True, exist_ok=True)
-
-
-def now_timestamp() -> str:
-    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-
-def read_lines(file_path: Path) -> List[str]:
-    if not file_path.exists():
-        raise FileNotFoundError(f"File not found: {file_path}")
-    lines: List[str] = []
-    for raw in file_path.read_text(encoding="utf-8", errors="ignore").splitlines():
-        line = raw.strip()
-        if not line or line.startswith("#"):
-            continue
-        lines.append(line)
-    return lines
 
 
 def read_json(file_path: Path) -> dict:
@@ -44,11 +23,10 @@ def read_json(file_path: Path) -> dict:
 
 
 def dedupe(items: Iterable[str]) -> List[str]:
-    seen = set()
+    seen: Set[str] = set()
     ordered: List[str] = []
     for item in items:
-        if item in seen:
-            continue
-        seen.add(item)
-        ordered.append(item)
+        if item not in seen:
+            seen.add(item)
+            ordered.append(item)
     return ordered
