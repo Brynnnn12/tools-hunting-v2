@@ -15,25 +15,25 @@ from modules.reporter import Reporter
 from modules.scanner import Scanner
 from modules.searcher import Searcher
 
-
 AUTHOR = "brynnnn12"
 VERSION = "1.0"
 
 BANNER = f"""
-   ____ _ _   _ ____      ____                      __
-  / ___(_) | | |  _ \    |  _ \ ___  ___ ___  _ __ / _|
- | |  _| | |_| | |_) |   | |_) / _ \/ __/ _ \| '__| |_
- | |_| | |  _  |  __/    |  _ <  __/ (_| (_) | |  |  _|
-  \____|_|_| |_|_|       |_| \_\___|\___\___/|_|  |_|
 
-  GitHubRecon  v{VERSION}  —  {AUTHOR}
+   ____ _ _   _ ____      ____                      __
+  / ___(_) | | |  _ \\    |  _ \\ ___  ___ ___  _ __ / _|
+ | |  _| | |_| | |_) |   | |_) / _ \\/ __/ _ \\| '__| |_
+ | |_| | |  _  |  __/    |  _ <  __/ (_| (_) | |  |  _|
+  \\____|_|_| |_|_|       |_| \\_\\___|\\___\\___/|_|  |_|
+
+  GitHubRecon  v{VERSION}  \u2014  {AUTHOR}
 """
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="github_recon.py",
-        description="GitHub Recon — search for leaked secrets, internal paths, and config files",
+        description="GitHub Recon \u2014 search for leaked secrets, internal paths, and config files",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument("-d", "--domain", help="Target domain")
@@ -41,7 +41,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("-o", "--output", default="output", help="Output directory (default: output)")
     parser.add_argument("--max-results", type=int, default=500, help="Max results per query (default: 500)")
     parser.add_argument("--json", action="store_true", help="Export JSON report")
-    parser.add_argument("--version", action="version", version=f"GitHubRecon v{VERSION} — {AUTHOR}")
+    parser.add_argument("--version", action="version", version=f"GitHubRecon v{VERSION} \u2014 {AUTHOR}")
     return parser
 
 
@@ -83,7 +83,7 @@ def main() -> int:
             logger.info("Processing domain: %s", domain)
 
             if not cfg.token:
-                console.print(f"  [!] No GITHUB_TOKEN env var — limited to 60 req/hr")
+                console.print(f"  [!] No GITHUB_TOKEN env var \u2014 limited to 60 req/hr")
                 console.print(f"      Set GITHUB_TOKEN environment variable for 5000 req/hr")
 
             queries = [q.format(domain=domain) for q in cfg.search_queries]
