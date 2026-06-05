@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 import urllib.request
-from typing import List, Set
+from typing import Set
 
 
 def securitytrails_subdomains(domain: str, api_key: str) -> Set[str]:

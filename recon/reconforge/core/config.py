@@ -6,9 +6,6 @@ from pathlib import Path
 from typing import Dict
 
 
-from lib.dotenv import find_and_load_dotenv  # noqa: F401
-
-
 @dataclass
 class AppConfig:
     domain: str

@@ -3,7 +3,7 @@ from __future__ import annotations
 import argparse
 import logging
 from pathlib import Path
-from typing import Dict, List
+
 
 from rich.console import Console
 
@@ -20,14 +20,19 @@ from modules.visualizer import Visualizer
 AUTHOR = "brynnnn12"
 VERSION = f"AttackSurfaceMapper v1.0 \u2014 {AUTHOR}"
 
-BANNER = f"""
-    _   _____ __  __
-   / \\ / ____|  \\/  |
-  / _ \\ (___ | \\  / |
- / ___ \\ ___ \\| |\\/| |
-/_/   \\_\\___) |_|  |_|
-
-Attack Surface Mapper  v1.0  \u2014  {AUTHOR}
+BANNER = """
+\u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557
+\u2551                                                                      \u2551
+\u2551   BBBB   RRRR   Y   Y  N   N  N   N  N   N  N   N                    \u2551
+\u2551   B   B  R   R   Y Y   NN  N  NN  N  NN  N  NN  N                    \u2551
+\u2551   BBBB   RRRR     Y    N N N  N N N  N N N  N N N                    \u2551
+\u2551   B   B  R  R     Y    N  NN  N  NN  N  NN  N  NN                    \u2551
+\u2551   BBBB   R   R    Y    N   N  N   N  N   N  N   N                    \u2551
+\u2551                                                                      \u2551
+\u2551   AttackSurfaceMapper v1.0  Endpoint classification & graph          \u2551
+\u2551   brynnnn12                                                          \u2551
+\u2551                                                                      \u2551
+\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255d
 """
 
 
@@ -69,7 +74,7 @@ def main() -> int:
             return 1
 
         reports_dir = Path(args.output).resolve() if args.output else config.reports_dir
-        logger = setup_logger(config.log_file, name="asm")
+        logger = setup_logger("asm")
         logger.info("Starting AttackSurfaceMapper")
 
         parser_mod = Parser(logger)

@@ -10,7 +10,7 @@ from rich.console import Console
 
 from core.config import Config
 from core.logger import setup_logger
-from core.utils import ensure_dir, normalize_domain, now_timestamp, read_lines, safe_filename
+from core.utils import ensure_dir, normalize_domain, read_lines, safe_filename
 from modules.reporter import Reporter
 from modules.scanner import Scanner
 from modules.searcher import Searcher
@@ -19,14 +19,18 @@ AUTHOR = "brynnnn12"
 VERSION = "1.0"
 
 BANNER = f"""
-
-   ____ _ _   _ ____      ____                      __
-  / ___(_) | | |  _ \\    |  _ \\ ___  ___ ___  _ __ / _|
- | |  _| | |_| | |_) |   | |_) / _ \\/ __/ _ \\| '__| |_
- | |_| | |  _  |  __/    |  _ <  __/ (_| (_) | |  |  _|
-  \\____|_|_| |_|_|       |_| \\_\\___|\\___\\___/|_|  |_|
-
-  GitHubRecon  v{VERSION}  \u2014  {AUTHOR}
+\u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557
+\u2551                                                                      \u2551
+\u2551   BBBB   RRRR   Y   Y  N   N  N   N  N   N  N   N                    \u2551
+\u2551   B   B  R   R   Y Y   NN  N  NN  N  NN  N  NN  N                    \u2551
+\u2551   BBBB   RRRR     Y    N N N  N N N  N N N  N N N                    \u2551
+\u2551   B   B  R  R     Y    N  NN  N  NN  N  NN  N  NN                    \u2551
+\u2551   BBBB   R   R    Y    N   N  N   N  N   N  N   N                    \u2551
+\u2551                                                                      \u2551
+\u2551   GitHubRecon v{{VERSION:<5}}  GitHub leak & secret search           \u2551
+\u2551   {{AUTHOR}}                                                         \u2551
+\u2551                                                                      \u2551
+\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255d
 """
 
 
@@ -72,7 +76,7 @@ def main() -> int:
 
         output_root = Path(args.output).expanduser().resolve()
         ensure_dir(output_root)
-        logger = setup_logger(output_root / "_github_recon.log", name="github_recon")
+        logger = setup_logger("github_recon")
         logger.info("Starting GitHubRecon for %d domain(s)", len(domains))
 
         console.print(BANNER)

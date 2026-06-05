@@ -1,0 +1,67 @@
+2026-06-04 22:24:23 INFO Parsing ReconForge output
+2026-06-04 22:24:23 INFO Using hosts.txt as live.txt
+2026-06-04 22:24:23 WARNING Missing file: D:\belajar\tools\_test_rh_input\jshunter\graphql.txt
+2026-06-04 22:24:23 WARNING Missing file: D:\belajar\tools\_test_rh_input\jshunter\keywords.txt
+2026-06-04 22:24:23 INFO Parsing JSHunter output
+2026-06-04 22:24:23 INFO Parsing ASM output
+2026-06-04 22:24:23 INFO Generating visualization charts
+2026-06-04 22:24:24 INFO Report generation completed
+2026-06-04 22:25:43 INFO Parsing ReconForge output
+2026-06-04 22:25:43 INFO Using hosts.txt as live.txt
+2026-06-04 22:25:43 WARNING Missing file: D:\belajar\tools\workspace\example.com\jshunter\endpoints.txt
+2026-06-04 22:25:43 WARNING Missing file: D:\belajar\tools\workspace\example.com\jshunter\graphql.txt
+2026-06-04 22:25:43 WARNING Missing file: D:\belajar\tools\workspace\example.com\jshunter\frameworks.txt
+2026-06-04 22:25:43 WARNING Missing file: D:\belajar\tools\workspace\example.com\jshunter\keywords.txt
+2026-06-04 22:25:43 WARNING Missing file: D:\belajar\tools\workspace\example.com\asm\attack_surface.json
+2026-06-04 22:25:43 INFO Parsing JSHunter output
+2026-06-04 22:25:43 WARNING Missing JSHunter folder: D:\belajar\tools\workspace\example.com\jshunter
+2026-06-04 22:25:43 INFO Parsing ASM output
+2026-06-04 22:25:43 INFO Generating visualization charts
+2026-06-04 22:25:43 INFO Report generation completed
+2026-06-04 23:22:01 INFO Parsing ReconForge output
+2026-06-04 23:22:01 INFO Using hosts.txt as live.txt
+2026-06-04 23:22:01 WARNING Missing file: D:\belajar\tools\_prod_rh\jshunter\graphql.txt
+2026-06-04 23:22:01 WARNING Missing file: D:\belajar\tools\_prod_rh\jshunter\keywords.txt
+2026-06-04 23:22:01 INFO Parsing JSHunter output
+2026-06-04 23:22:01 INFO Parsing ASM output
+2026-06-04 23:22:01 INFO Generating visualization charts
+2026-06-04 23:22:02 INFO Report generation completed
+2026-06-04 23:22:45 INFO Parsing ReconForge output
+2026-06-04 23:22:45 INFO Using hosts.txt as live.txt
+2026-06-04 23:22:45 WARNING Missing file: D:\belajar\tools\workspace\example.com\jshunter\endpoints.txt
+2026-06-04 23:22:45 WARNING Missing file: D:\belajar\tools\workspace\example.com\jshunter\graphql.txt
+2026-06-04 23:22:45 WARNING Missing file: D:\belajar\tools\workspace\example.com\jshunter\frameworks.txt
+2026-06-04 23:22:45 WARNING Missing file: D:\belajar\tools\workspace\example.com\jshunter\keywords.txt
+2026-06-04 23:22:45 WARNING Missing file: D:\belajar\tools\workspace\example.com\asm\attack_surface.json
+2026-06-04 23:22:45 INFO Parsing JSHunter output
+2026-06-04 23:22:45 WARNING Missing JSHunter folder: D:\belajar\tools\workspace\example.com\jshunter
+2026-06-04 23:22:45 INFO Parsing ASM output
+2026-06-04 23:22:45 INFO Generating visualization charts
+2026-06-04 23:22:45 INFO Report generation completed
+2026-06-04 23:34:40 INFO Parsing ReconForge output
+2026-06-04 23:34:40 INFO Using hosts.txt as live.txt
+2026-06-04 23:34:40 WARNING Missing file: D:\belajar\tools\workspace\example.com\jshunter\endpoints.txt
+2026-06-04 23:34:40 WARNING Missing file: D:\belajar\tools\workspace\example.com\jshunter\graphql.txt
+2026-06-04 23:34:40 WARNING Missing file: D:\belajar\tools\workspace\example.com\jshunter\frameworks.txt
+2026-06-04 23:34:40 WARNING Missing file: D:\belajar\tools\workspace\example.com\jshunter\keywords.txt
+2026-06-04 23:34:40 WARNING Missing file: D:\belajar\tools\workspace\example.com\asm\attack_surface.json
+2026-06-04 23:34:40 INFO Parsing JSHunter output
+2026-06-04 23:34:40 WARNING Missing JSHunter folder: D:\belajar\tools\workspace\example.com\jshunter
+2026-06-04 23:34:40 INFO Parsing ASM output
+2026-06-04 23:34:40 INFO Generating visualization charts
+2026-06-04 23:34:40 INFO Report generation completed
+2026-06-05 00:16:59 INFO Parsing ReconForge output
+2026-06-05 00:16:59 WARNING Missing file: _rh_test_input\recon\live.txt
+2026-06-05 00:16:59 WARNING Missing file: _rh_test_input\recon\urls.txt
+2026-06-05 00:16:59 WARNING Missing file: _rh_test_input\jshunter\endpoints.txt
+2026-06-05 00:16:59 WARNING Missing file: _rh_test_input\jshunter\graphql.txt
+2026-06-05 00:16:59 WARNING Missing file: _rh_test_input\jshunter\frameworks.txt
+2026-06-05 00:16:59 WARNING Missing file: _rh_test_input\jshunter\keywords.txt
+2026-06-05 00:16:59 WARNING Missing file: _rh_test_input\jshunter\secrets.txt
+2026-06-05 00:16:59 WARNING Missing file: _rh_test_input\asm\attack_surface.json
+2026-06-05 00:16:59 WARNING Missing file: _rh_test_input\scan\report.json
+2026-06-05 00:16:59 INFO Parsing JSHunter output
+2026-06-05 00:16:59 WARNING Missing JSHunter folder: _rh_test_input\jshunter
+2026-06-05 00:16:59 INFO Parsing ASM output
+2026-06-05 00:16:59 INFO Generating visualization charts
+2026-06-05 00:16:59 INFO Report generation completed

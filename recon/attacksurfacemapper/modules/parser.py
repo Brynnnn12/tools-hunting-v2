@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Dict, Set
+from typing import Set
 
 from core.utils import InputBundle, read_lines
 

@@ -29,13 +29,18 @@ AUTHOR = "brynnnn12"
 VERSION = "1.0"
 
 BANNER = f"""
-     _ ____  _   _             _
-    | / ___|| | | |_   _ _ __ | |_ ___ _ __
- _  | \\___ \\| |_| | | | | '_ \\| __/ _ \\ '__|
-| |_| |___) |  _  | |_| | | | | ||  __/ |
- \\___/|____/|_| |_|\\__,_|_| |_|\\__\\___|_|
-
-JavaScript Intelligence Framework  v{VERSION}  \u2014  {AUTHOR}
+\u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557
+\u2551                                                                      \u2551
+\u2551   BBBB   RRRR   Y   Y  N   N  N   N  N   N  N   N                    \u2551
+\u2551   B   B  R   R   Y Y   NN  N  NN  N  NN  N  NN  N                    \u2551
+\u2551   BBBB   RRRR     Y    N N N  N N N  N N N  N N N                    \u2551
+\u2551   B   B  R  R     Y    N  NN  N  NN  N  NN  N  NN                    \u2551
+\u2551   BBBB   R   R    Y    N   N  N   N  N   N  N   N                    \u2551
+\u2551                                                                      \u2551
+\u2551   JSHunter v{{VERSION:<5}}  JavaScript Intelligence Framework        \u2551
+\u2551   {{AUTHOR}}                                                         \u2551
+\u2551                                                                      \u2551
+\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255d
 """
 
 
@@ -65,7 +70,6 @@ def resolve_target(urls: List[str]) -> str:
 
 
 def read_local_js(dir_path: Path) -> dict:
-    from modules.analyzer import Analyzer
     contents: dict = {}
     files = find_js_files_local(dir_path)
     for fp in files:
@@ -116,7 +120,7 @@ def main() -> int:
         output_root = Path(args.output) if args.output else config.output_dir
         ensure_dir(output_root)
 
-        logger = setup_logger(config.log_file, name="jshunter", stream=True)
+        logger = setup_logger("jshunter")
         logger.info("Starting JSHunter")
 
         contents: dict = {}

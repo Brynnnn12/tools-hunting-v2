@@ -59,5 +59,4 @@ jshunter/
   core/         — config, logger, utils
   modules/      — downloader, extractor, classifier, reporter, statistics
   output/       — per-target results
-  logs/         — jshunter.log
-```
+  ```

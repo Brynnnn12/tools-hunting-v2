@@ -18,13 +18,19 @@ from modules.subdomains import SubdomainModule
 from modules.urls import UrlsModule
 from modules.whois import WhoIsModule
 
-BANNER = r"""
- ____                         ______                     
-|  _ \ ___  ___ ___  _ __    |  ___|__  _ __ _ __ _   _ 
-| |_) / _ \/ __/ _ \| '_ \   | |_ / _ \| '__| '__| | | |
-|  _ <  __/ (_| (_) | | | |  |  _| (_) | |  | |  | |_| |
-|_| \_\___|\___\___/|_| |_|  |_|  \___/|_|  |_|   \__, |
-                                                  |___/ 
+BANNER = f"""
+\u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557
+\u2551                                                                      \u2551
+\u2551   BBBB   RRRR   Y   Y  N   N  N   N  N   N  N   N                    \u2551
+\u2551   B   B  R   R   Y Y   NN  N  NN  N  NN  N  NN  N                    \u2551
+\u2551   BBBB   RRRR     Y    N N N  N N N  N N N  N N N                    \u2551
+\u2551   B   B  R  R     Y    N  NN  N  NN  N  NN  N  NN                    \u2551
+\u2551   BBBB   R   R    Y    N   N  N   N  N   N  N   N                    \u2551
+\u2551                                                                      \u2551
+\u2551   ReconForge v{{VERSION:<5}}  Subdomains / Hosts / URLs / Whois      \u2551
+\u2551   {{AUTHOR}}                                                         \u2551
+\u2551                                                                      \u2551
+\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255d
 """
 
 VERSION = "0.2.0"
@@ -35,7 +41,7 @@ class ReconForgeApp:
     def __init__(self, config: AppConfig, console: Console) -> None:
         self.config = config
         self.console = console
-        self.logger = setup_logger(self.config.output_dir / "reconforge.log")
+        self.logger = setup_logger("reconforge")
 
     def run(self, modules: List[object], run_report: bool) -> int:
         if not modules and not run_report:

@@ -8,17 +8,11 @@ import sys
 from pathlib import Path
 from typing import List
 
+import lib.logger  # noqa: F401 — configures root logger
+
 BASE = Path(__file__).resolve().parent
 AUTHOR = "brynnnn12"
 VERSION = "1.0"
-
-LOG_DIR = BASE / "logs"
-LOG_DIR.mkdir(parents=True, exist_ok=True)
-logging.basicConfig(
-    filename=LOG_DIR / "pipeline.log",
-    level=logging.INFO,
-    format="%(asctime)s %(levelname)s %(message)s",
-)
 
 
 BANNER = f"""

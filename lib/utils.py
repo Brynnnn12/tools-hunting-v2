@@ -4,7 +4,7 @@ import json
 import re
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Iterable, List, Optional, Set
+from typing import Any, Iterable, List, Set
 from urllib.parse import urlparse
 
 

@@ -3,7 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Dict, List, Optional
 
-from core.utils import InputPaths, read_json, read_lines
+from core.utils import read_json, read_lines
 
 
 class Parser:

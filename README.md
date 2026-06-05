@@ -56,7 +56,7 @@ python recon/reconforge/recon.py -d example.com --all --json
 | 4/5 | Install dependencies dari `requirements/*.txt` |
 | 5/5 | Verifikasi semua import berhasil |
 
-Semua output dicatat ke `logs/install.log`.
+Semua output muncul di terminal.
 
 ### Struktur Dependency
 
@@ -207,7 +207,7 @@ BugBountySuite/
 │   ├── attacksurfacemapper.txt
 │   └── reporthub.txt
 ├── .venv/              # Virtual environment (auto-generated)
-├── logs/               # Log installer
+
 ├── output/             # Output per tool
 ├── workspace/          # Output pipeline terpadu
 ├── reports/            # Laporan final

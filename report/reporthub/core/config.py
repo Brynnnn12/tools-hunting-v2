@@ -17,8 +17,6 @@ class Config:
     version: str = "1.0"
     reports_dir: Path = Path("reports")
     output_dir: Path = Path("output")
-    logs_dir: Path = Path("logs")
-    log_file: Path = Path("logs/reporthub.log")
 
     def __post_init__(self) -> None:
         find_and_load_dotenv()

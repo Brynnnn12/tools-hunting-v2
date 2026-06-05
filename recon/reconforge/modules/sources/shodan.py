@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 import urllib.request
-from typing import Dict, List, Set
+from typing import Set
 
 
 def shodan_subdomains(domain: str, api_key: str) -> Set[str]:

@@ -37,16 +37,16 @@ header(){ echo -e "\n${BOLD}━━━ $* ━━━${NC}\n" | tee -a "$LOG_FILE";
 # ── Entry banner ─────────────────────────────────────────────────
 echo -e "${BOLD}
 ╔══════════════════════════════════════════════════════════╗
-║                                                        ║
-║   BBBB   RRRR   Y   Y  N   N  N   N  N   N  N   N     ║
-║   B   B  R   R   Y Y   NN  N  NN  N  NN  N  NN  N     ║
-║   BBBB   RRRR     Y    N N N  N N N  N N N  N N N     ║
-║   B   B  R  R     Y    N  NN  N  NN  N  NN  N  NN     ║
-║   BBBB   R   R    Y    N   N  N   N  N   N  N   N     ║
-║                                                        ║
-║              BugBountySuite — Installer                ║
-║           Unified Virtual Environment                  ║
-║                                                        ║
+║                                                          ║
+║   BBBB   RRRR   Y   Y  N   N  N   N  N   N  N   N        ║
+║   B   B  R   R   Y Y   NN  N  NN  N  NN  N  NN  N        ║
+║   BBBB   RRRR     Y    N N N  N N N  N N N  N N N        ║
+║   B   B  R  R     Y    N  NN  N  NN  N  NN  N  NN        ║
+║   BBBB   R   R    Y    N   N  N   N  N   N  N   N        ║
+║                                                          ║
+║                 Setup — Installer                        ║
+║              Unified Virtual Environment                 ║
+║                                                          ║
 ╚══════════════════════════════════════════════════════════╝${NC}"
 
 # ── Setup log dir ───────────────────────────────────────────────
@@ -164,12 +164,12 @@ else:
 
 echo ""
 echo ""
-echo -e "${GREEN}╔══════════════════════════════════════════════════════════╗"
-echo -e "║                 INSTALLATION COMPLETE                      ║"
-echo -e "╠══════════════════════════════════════════════════════════╣"
-echo -e "║  ${CYAN}Log:${NC}      $LOG_FILE"
-echo -e "║  ${CYAN}Activate:${NC}  source .venv/bin/activate                       ║"
-echo -e "║             .venv\\Scripts\\activate                        ║"
-echo -e "║  ${YELLOW}Token:${NC}    export GITHUB_TOKEN=ghp_xxx                     ║"
-echo -e "║  ${GREEN}Run:${NC}      python pipeline.py -d example.com               ║"
-echo -e "╚══════════════════════════════════════════════════════════╝${NC}"
+echo -e "${GREEN}╔══════════════════════════════════════════════════════════════════╗"
+echo -e "        ║                 INSTALLATION COMPLETE                            ║"
+echo -e "        ╠══════════════════════════════════════════════════════════════════╣"
+echo -e "        ║  ${CYAN}Log     :${NC} $LOG_FILE"                                ║"  
+echo -e "        ║  ${CYAN}Activate:${NC} source .venv/bin/activate                 ║"
+echo -e "        ║                        .venv\\Scripts\\activate                  ║"
+echo -e "        ║  ${YELLOW}Token :${NC}  export GITHUB_TOKEN=ghp_xxx              ║"
+echo -e "        ║  ${GREEN}Run    :${NC}  python pipeline.py -d example.com        ║"
+echo -e "        ╚══════════════════════════════════════════════════════════════════╝${NC}"

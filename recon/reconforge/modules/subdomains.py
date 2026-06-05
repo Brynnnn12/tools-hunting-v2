@@ -5,7 +5,6 @@ import urllib.request
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Dict, List, Optional, Set
 
-import dns.exception
 import dns.resolver
 
 from core.utils import run_tool, which

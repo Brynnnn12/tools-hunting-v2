@@ -1,0 +1,102 @@
+2026-06-04 22:16:59 INFO Starting AttackSurfaceMapper
+2026-06-04 22:16:59 INFO Parsing input data
+2026-06-04 22:16:59 WARNING Missing input file: D:\belajar\tools\workspace\test.example.com\subdomains.txt
+2026-06-04 22:16:59 WARNING Missing input file: D:\belajar\tools\workspace\test.example.com\live.txt
+2026-06-04 22:16:59 WARNING Missing input file: D:\belajar\tools\workspace\test.example.com\all_urls.txt
+2026-06-04 22:16:59 WARNING Missing input file: D:\belajar\tools\workspace\test.example.com\js.txt
+2026-06-04 22:16:59 WARNING Missing input file: D:\belajar\tools\workspace\test.example.com\endpoints.txt
+2026-06-04 22:16:59 WARNING Missing input file: D:\belajar\tools\workspace\test.example.com\graphql.txt
+2026-06-04 22:16:59 WARNING Missing input file: D:\belajar\tools\workspace\test.example.com\websockets.txt
+2026-06-04 22:16:59 WARNING Missing input file: D:\belajar\tools\workspace\test.example.com\storage.txt
+2026-06-04 22:16:59 WARNING Missing input file: D:\belajar\tools\workspace\test.example.com\frameworks.txt
+2026-06-04 22:16:59 WARNING Missing input file: D:\belajar\tools\workspace\test.example.com\keywords.txt
+2026-06-04 22:16:59 INFO Generating graph visualization
+2026-06-04 22:17:02 INFO Reports saved to reports
+2026-06-04 22:17:50 INFO Starting AttackSurfaceMapper
+2026-06-04 22:17:50 INFO Parsing input data
+2026-06-04 22:17:50 WARNING Missing input file: D:\belajar\tools\workspace\test.example.com\js.txt
+2026-06-04 22:17:50 WARNING Missing input file: D:\belajar\tools\workspace\test.example.com\endpoints.txt
+2026-06-04 22:17:50 WARNING Missing input file: D:\belajar\tools\workspace\test.example.com\graphql.txt
+2026-06-04 22:17:50 WARNING Missing input file: D:\belajar\tools\workspace\test.example.com\websockets.txt
+2026-06-04 22:17:50 WARNING Missing input file: D:\belajar\tools\workspace\test.example.com\storage.txt
+2026-06-04 22:17:50 WARNING Missing input file: D:\belajar\tools\workspace\test.example.com\frameworks.txt
+2026-06-04 22:17:50 WARNING Missing input file: D:\belajar\tools\workspace\test.example.com\keywords.txt
+2026-06-04 22:17:50 INFO Generating graph visualization
+2026-06-04 22:17:50 INFO Reports saved to reports
+2026-06-04 22:22:25 INFO Starting AttackSurfaceMapper
+2026-06-04 22:22:25 INFO Parsing input data
+2026-06-04 22:22:25 WARNING Missing input file: D:\belajar\tools\workspace\test.example.com\js.txt
+2026-06-04 22:22:25 WARNING Missing input file: D:\belajar\tools\workspace\test.example.com\endpoints.txt
+2026-06-04 22:22:25 WARNING Missing input file: D:\belajar\tools\workspace\test.example.com\graphql.txt
+2026-06-04 22:22:25 WARNING Missing input file: D:\belajar\tools\workspace\test.example.com\websockets.txt
+2026-06-04 22:22:25 WARNING Missing input file: D:\belajar\tools\workspace\test.example.com\storage.txt
+2026-06-04 22:22:25 WARNING Missing input file: D:\belajar\tools\workspace\test.example.com\frameworks.txt
+2026-06-04 22:22:25 WARNING Missing input file: D:\belajar\tools\workspace\test.example.com\keywords.txt
+2026-06-04 22:22:25 INFO Generating graph visualization
+2026-06-04 22:22:26 INFO Reports saved to reports
+2026-06-04 22:24:09 INFO Starting AttackSurfaceMapper
+2026-06-04 22:24:09 INFO Parsing input data
+2026-06-04 22:24:09 INFO Using hosts.txt as live.txt
+2026-06-04 22:24:09 INFO Using urls.txt as all_urls.txt
+2026-06-04 22:24:09 WARNING Missing input file: D:\belajar\tools\_test_asm_input\js.txt
+2026-06-04 22:24:09 WARNING Missing input file: D:\belajar\tools\_test_asm_input\graphql.txt
+2026-06-04 22:24:09 WARNING Missing input file: D:\belajar\tools\_test_asm_input\websockets.txt
+2026-06-04 22:24:09 WARNING Missing input file: D:\belajar\tools\_test_asm_input\storage.txt
+2026-06-04 22:24:09 WARNING Missing input file: D:\belajar\tools\_test_asm_input\keywords.txt
+2026-06-04 22:24:09 INFO Generating graph visualization
+2026-06-04 22:24:10 INFO Reports saved to reports
+2026-06-04 22:25:42 INFO Starting AttackSurfaceMapper
+2026-06-04 22:25:42 INFO Parsing input data
+2026-06-04 22:25:42 WARNING Missing input file: D:\belajar\tools\workspace\example.com\js.txt
+2026-06-04 22:25:42 WARNING Missing input file: D:\belajar\tools\workspace\example.com\endpoints.txt
+2026-06-04 22:25:42 WARNING Missing input file: D:\belajar\tools\workspace\example.com\graphql.txt
+2026-06-04 22:25:42 WARNING Missing input file: D:\belajar\tools\workspace\example.com\websockets.txt
+2026-06-04 22:25:42 WARNING Missing input file: D:\belajar\tools\workspace\example.com\storage.txt
+2026-06-04 22:25:42 WARNING Missing input file: D:\belajar\tools\workspace\example.com\frameworks.txt
+2026-06-04 22:25:42 WARNING Missing input file: D:\belajar\tools\workspace\example.com\keywords.txt
+2026-06-04 22:25:42 INFO Generating graph visualization
+2026-06-04 22:25:42 INFO Reports saved to reports
+2026-06-04 23:21:53 INFO Starting AttackSurfaceMapper
+2026-06-04 23:21:53 INFO Parsing input data
+2026-06-04 23:21:53 INFO Using hosts.txt as live.txt
+2026-06-04 23:21:53 INFO Using urls.txt as all_urls.txt
+2026-06-04 23:21:53 WARNING Missing input file: D:\belajar\tools\_prod_asm\js.txt
+2026-06-04 23:21:53 WARNING Missing input file: D:\belajar\tools\_prod_asm\graphql.txt
+2026-06-04 23:21:53 WARNING Missing input file: D:\belajar\tools\_prod_asm\websockets.txt
+2026-06-04 23:21:53 WARNING Missing input file: D:\belajar\tools\_prod_asm\storage.txt
+2026-06-04 23:21:53 WARNING Missing input file: D:\belajar\tools\_prod_asm\keywords.txt
+2026-06-04 23:21:53 INFO Generating graph visualization
+2026-06-04 23:21:54 INFO Reports saved to reports
+2026-06-04 23:22:43 INFO Starting AttackSurfaceMapper
+2026-06-04 23:22:43 INFO Parsing input data
+2026-06-04 23:22:43 WARNING Missing input file: D:\belajar\tools\workspace\example.com\js.txt
+2026-06-04 23:22:43 WARNING Missing input file: D:\belajar\tools\workspace\example.com\endpoints.txt
+2026-06-04 23:22:43 WARNING Missing input file: D:\belajar\tools\workspace\example.com\graphql.txt
+2026-06-04 23:22:43 WARNING Missing input file: D:\belajar\tools\workspace\example.com\websockets.txt
+2026-06-04 23:22:43 WARNING Missing input file: D:\belajar\tools\workspace\example.com\storage.txt
+2026-06-04 23:22:43 WARNING Missing input file: D:\belajar\tools\workspace\example.com\frameworks.txt
+2026-06-04 23:22:43 WARNING Missing input file: D:\belajar\tools\workspace\example.com\keywords.txt
+2026-06-04 23:22:43 INFO Generating graph visualization
+2026-06-04 23:22:43 INFO Reports saved to reports
+2026-06-04 23:34:38 INFO Starting AttackSurfaceMapper
+2026-06-04 23:34:38 INFO Parsing input data
+2026-06-04 23:34:38 WARNING Missing input file: D:\belajar\tools\workspace\example.com\js.txt
+2026-06-04 23:34:38 WARNING Missing input file: D:\belajar\tools\workspace\example.com\endpoints.txt
+2026-06-04 23:34:38 WARNING Missing input file: D:\belajar\tools\workspace\example.com\graphql.txt
+2026-06-04 23:34:38 WARNING Missing input file: D:\belajar\tools\workspace\example.com\websockets.txt
+2026-06-04 23:34:38 WARNING Missing input file: D:\belajar\tools\workspace\example.com\storage.txt
+2026-06-04 23:34:38 WARNING Missing input file: D:\belajar\tools\workspace\example.com\frameworks.txt
+2026-06-04 23:34:38 WARNING Missing input file: D:\belajar\tools\workspace\example.com\keywords.txt
+2026-06-04 23:34:38 INFO Generating graph visualization
+2026-06-04 23:34:38 INFO Reports saved to reports
+2026-06-05 00:09:35 INFO Starting AttackSurfaceMapper
+2026-06-05 00:09:35 INFO Parsing input data
+2026-06-05 00:09:35 WARNING Missing input file: _asm_test_input\all_urls.txt
+2026-06-05 00:09:35 WARNING Missing input file: _asm_test_input\js.txt
+2026-06-05 00:09:35 WARNING Missing input file: _asm_test_input\graphql.txt
+2026-06-05 00:09:35 WARNING Missing input file: _asm_test_input\websockets.txt
+2026-06-05 00:09:35 WARNING Missing input file: _asm_test_input\storage.txt
+2026-06-05 00:09:35 WARNING Missing input file: _asm_test_input\frameworks.txt
+2026-06-05 00:09:35 WARNING Missing input file: _asm_test_input\keywords.txt
+2026-06-05 00:09:35 INFO Generating graph visualization
+2026-06-05 00:09:35 INFO Reports saved to D:\belajar\tools\recon\attacksurfacemapper\_asm_test_output

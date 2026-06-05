@@ -19,15 +19,19 @@ from modules.visualizer import Visualizer
 AUTHOR = "brynnnn12"
 VERSION = f"ReportHub v1.0 \u2014 {AUTHOR}"
 
-BANNER = f"""
- ____                       _   _       _
-|  _ \\ ___ _ __   ___  _ __| |_| |_   _| |__
-| |_) / _ \\ '_ \\ / _ \\| '__| __| | | | | '_ \\
-|  _ <  __/ |_) | (_) | |  | |_| | |_| | |_) |
-|_| \\_\\___| .__/ \\___/|_|   \\__|_|\\__,_|_.__/
-          |_|
-
-ReportHub  v1.0  \u2014  {AUTHOR}
+BANNER = """
+\u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557
+\u2551                                                                      \u2551
+\u2551   BBBB   RRRR   Y   Y  N   N  N   N  N   N  N   N                    \u2551
+\u2551   B   B  R   R   Y Y   NN  N  NN  N  NN  N  NN  N                    \u2551
+\u2551   BBBB   RRRR     Y    N N N  N N N  N N N  N N N                    \u2551
+\u2551   B   B  R  R     Y    N  NN  N  NN  N  NN  N  NN                    \u2551
+\u2551   BBBB   R   R    Y    N   N  N   N  N   N  N   N                    \u2551
+\u2551                                                                      \u2551
+\u2551   ReportHub v1.0  Unified report & dashboard                         \u2551
+\u2551   brynnnn12                                                          \u2551
+\u2551                                                                      \u2551
+\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255d
 """
 
 
@@ -61,7 +65,7 @@ def main() -> int:
             return 1
 
         reports_dir = Path(args.output).resolve() if args.output else config.reports_dir
-        logger = setup_logger(config.log_file, name="reporthub")
+        logger = setup_logger("reporthub")
         logger.info("Starting ReportHub for: %s", input_dir.name)
 
         parser_mod = Parser(logger)

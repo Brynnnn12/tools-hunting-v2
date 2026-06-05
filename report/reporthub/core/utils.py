@@ -1,16 +1,7 @@
 import json
-from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable, List, Set
 
-from lib.utils import ensure_dir, now_timestamp, read_lines  # noqa: F401
-
-
-@dataclass
-class InputPaths:
-    recon_dir: Path
-    jshunter_dir: Path
-    asm_dir: Path
+from lib.utils import ensure_dir, now_timestamp, read_lines, dedupe_preserve_order as dedupe  # noqa: F401
 
 
 def read_json(file_path: Path) -> dict:
@@ -22,11 +13,4 @@ def read_json(file_path: Path) -> dict:
         raise ValueError(f"Malformed JSON: {file_path}") from exc
 
 
-def dedupe(items: Iterable[str]) -> List[str]:
-    seen: Set[str] = set()
-    ordered: List[str] = []
-    for item in items:
-        if item not in seen:
-            seen.add(item)
-            ordered.append(item)
-    return ordered
+

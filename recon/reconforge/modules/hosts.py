@@ -3,10 +3,9 @@ from __future__ import annotations
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Dict, List, Optional, Set
 
-import dns.exception
 import dns.resolver
 
-from core.utils import run_tool, which
+from core.utils import which
 from modules.sources import shodan
 
 HOST_WORDLIST = [

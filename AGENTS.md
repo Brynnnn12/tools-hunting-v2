@@ -54,6 +54,6 @@ Flags: `--skip-recon`, `--skip-jshunter`, `--skip-asm`, `--skip-scanforge`, `--s
 - Single `.venv/` at root — created by `./install.sh`.
 - Per-tool deps in `requirements/*.txt`, all installed into root `.venv`.
 - Output is written to `workspace/{domain}/` by the pipeline, or to `output/{domain}/` per tool.
-- `.venv/`, `__pycache__/`, `output/`, `reports/`, `logs/`, `workspace/` are gitignored.
+- `.venv/`, `__pycache__/`, `output/`, `reports/`, `workspace/` are gitignored.
 - All tools require internet access.
 - Author: [brynnnn12](https://github.com/brynnnn12)

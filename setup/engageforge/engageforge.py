@@ -4,9 +4,10 @@ import argparse
 import logging
 import subprocess
 import sys
+import lib.logger  # noqa: F401 — configures root logger
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Tuple
 
 AUTHOR = "brynnnn12"
 VERSION = "1.0"
@@ -23,15 +24,18 @@ TOOLS = {
 }
 
 BANNER = f"""
-  _____                  _                 _____
- | ____|_ __   ___  __ _| |__   ___  ___  |  ___|__  _ __ _ __ _   _
- |  _| | '_ \\ / _ \\/ _` | '_ \\ / _ \\/ _ \\ | |_ / _ \\| '__| '__| | | |
- | |___| | | |  __/ (_| | | | |  __/  __/ |  _| (_) | |  | |  | |_| |
- |_____|_| |_|\\___|\\__, |_| |_|\\___|\\___| |_|  \\___/|_|  |_|   \\__, |
-                    |___/                                        |___/
-
-  EngageForge v{VERSION}  \u2014  {AUTHOR}
-  Pentest engagement folder structure generator
+\u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557
+\u2551                                                                      \u2551
+\u2551   BBBB   RRRR   Y   Y  N   N  N   N  N   N  N   N                    \u2551
+\u2551   B   B  R   R   Y Y   NN  N  NN  N  NN  N  NN  N                    \u2551
+\u2551   BBBB   RRRR     Y    N N N  N N N  N N N  N N N                    \u2551
+\u2551   B   B  R  R     Y    N  NN  N  NN  N  NN  N  NN                    \u2551
+\u2551   BBBB   R   R    Y    N   N  N   N  N   N  N   N                    \u2551
+\u2551                                                                      \u2551
+\u2551   EngageForge v{{VERSION:<5}}  Pentest engagement folder generator   \u2551
+\u2551   {{AUTHOR}}                                                         \u2551
+\u2551                                                                      \u2551
+\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255d
 """
 
 DEFAULT_STRUCTURE: List[Tuple[str, str]] = [

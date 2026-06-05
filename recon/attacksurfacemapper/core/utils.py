@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Iterable, List, Set
+from typing import Set
 
 from lib.utils import ensure_dir, extract_domain, now_timestamp, read_lines, safe_filename  # noqa: F401
 
@@ -20,11 +20,4 @@ class InputBundle:
     secrets: Set[str] = field(default_factory=set)
 
 
-def dedupe(items: Iterable[str]) -> List[str]:
-    seen: Set[str] = set()
-    ordered: List[str] = []
-    for item in items:
-        if item not in seen:
-            seen.add(item)
-            ordered.append(item)
-    return ordered
+

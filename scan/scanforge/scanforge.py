@@ -6,6 +6,7 @@ import logging
 import shutil
 import subprocess
 import sys
+import lib.logger  # noqa: F401 — configures root logger
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
@@ -14,15 +15,18 @@ AUTHOR = "brynnnn12"
 VERSION = "1.0"
 
 BANNER = f"""
-   ____                      _____
-  / ___|  ___ __ _ _ __ ___ |  ___|__  _ __ _ __ _   _
-  \\___ \\ / __/ _` | '_ ` _ \\| |_ / _ \\| '__| '__| | | |
-   ___) | (_| (_| | | | | | |  _| (_) | |  | |  | |_| |
-  |____/ \\___\\__,_|_| |_| |_|_|  \\___/|_|  |_|   \\__, |
-                                                    |___/
-
-  ScanForge v{VERSION}  \u2014  {AUTHOR}
-  Automated scanner wrapper \u2014 nmap + nuclei
+\u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557
+\u2551                                                                      \u2551
+\u2551   BBBB   RRRR   Y   Y  N   N  N   N  N   N  N   N                    \u2551
+\u2551   B   B  R   R   Y Y   NN  N  NN  N  NN  N  NN  N                    \u2551
+\u2551   BBBB   RRRR     Y    N N N  N N N  N N N  N N N                    \u2551
+\u2551   B   B  R  R     Y    N  NN  N  NN  N  NN  N  NN                    \u2551
+\u2551   BBBB   R   R    Y    N   N  N   N  N   N  N   N                    \u2551
+\u2551                                                                      \u2551
+\u2551   ScanForge v{{VERSION:<5}}  Automated nmap + nuclei scanner         \u2551
+\u2551   {{AUTHOR}}                                                         \u2551
+\u2551                                                                      \u2551
+\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255d
 """
 
 NMAP_PROFILES: Dict[str, List[str]] = {
