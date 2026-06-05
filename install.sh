@@ -36,10 +36,18 @@ header(){ echo -e "\n${BOLD}━━━ $* ━━━${NC}\n" | tee -a "$LOG_FILE";
 
 # ── Entry banner ─────────────────────────────────────────────────
 echo -e "${BOLD}
-╔══════════════════════════════════════════╗
-║        BugBountySuite — Installer        ║
-║        Unified Virtual Environment       ║
-╚══════════════════════════════════════════╝${NC}"
+╔══════════════════════════════════════════════════════════╗
+║                                                        ║
+║   BBBB   RRRR   Y   Y  N   N  N   N  N   N  N   N     ║
+║   B   B  R   R   Y Y   NN  N  NN  N  NN  N  NN  N     ║
+║   BBBB   RRRR     Y    N N N  N N N  N N N  N N N     ║
+║   B   B  R  R     Y    N  NN  N  NN  N  NN  N  NN     ║
+║   BBBB   R   R    Y    N   N  N   N  N   N  N   N     ║
+║                                                        ║
+║              BugBountySuite — Installer                ║
+║           Unified Virtual Environment                  ║
+║                                                        ║
+╚══════════════════════════════════════════════════════════╝${NC}"
 
 # ── Setup log dir ───────────────────────────────────────────────
 mkdir -p "$LOG_DIR"
@@ -155,9 +163,13 @@ else:
 "
 
 echo ""
-log "Installation complete!"
-info "Log saved to $LOG_FILE"
-info "Activate: source .venv/bin/activate  (Linux/macOS)"
-info "Activate: .venv\\Scripts\\activate   (Windows CMD)"
-info "Token:   export GITHUB_TOKEN=ghp_xxx  # for GitHubRecon (5000 req/hr)"
-info "Run:     python pipeline.py -d example.com"
+echo ""
+echo -e "${GREEN}╔══════════════════════════════════════════════════════════╗"
+echo -e "║                 INSTALLATION COMPLETE                      ║"
+echo -e "╠══════════════════════════════════════════════════════════╣"
+echo -e "║  ${CYAN}Log:${NC}      $LOG_FILE"
+echo -e "║  ${CYAN}Activate:${NC}  source .venv/bin/activate                       ║"
+echo -e "║             .venv\\Scripts\\activate                        ║"
+echo -e "║  ${YELLOW}Token:${NC}    export GITHUB_TOKEN=ghp_xxx                     ║"
+echo -e "║  ${GREEN}Run:${NC}      python pipeline.py -d example.com               ║"
+echo -e "╚══════════════════════════════════════════════════════════╝${NC}"
