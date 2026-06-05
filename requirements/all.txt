@@ -1,0 +1,9 @@
+# Combined dependencies for all BugBountySuite tools
+# Auto-generated — individual per-tool files are in this directory.
+# Install all with: pip install -r requirements/all.txt
+
+-r reconforge.txt
+-r jshunter.txt
+-r github_recon.txt
+-r attacksurfacemapper.txt
+-r reporthub.txt

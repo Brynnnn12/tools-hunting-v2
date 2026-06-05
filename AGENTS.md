@@ -18,23 +18,19 @@ Toolkit for domain recon, JS analysis, secret scanning, attack surface mapping, 
 ## Quick start
 
 ```bash
-# Install deps per tool (scanforge is stdlib only)
-cd recon/reconforge; pip install -r requirements.txt
-cd ../jshunter; pip install -r requirements.txt
-cd ../github_recon; pip install -r requirements.txt
-cd ../attacksurfacemapper; pip install -r requirements.txt
-cd ../reporthub; pip install -r requirements.txt
+# One-command install — creates .venv, installs all deps
+./install.sh
 
-# EngageForge & ScanForge have no external deps (stdlib only)
-cd ../../setup/engageforge; # no install needed
-cd ../../scan/scanforge; # no install needed
+# Activate virtual environment
+source .venv/bin/activate  # Linux/macOS
+.venv\Scripts\activate     # Windows CMD
 
-# Individual tools
+# Run individual tools
 python recon/reconforge/recon.py -d example.com --all --json
 python recon/jshunter/jshunter.py -u https://example.com/app.js --json
 python recon/github_recon/github_recon.py -d example.com --json
 python setup/engageforge/engageforge.py -t example.com
-python scan/scanforge/scanforge.py -i recon/reconforge/output/example.com
+python scan/scanforge/scanforge.py -i output/example.com
 ```
 
 ## Pipeline (`pipeline.py`)
@@ -55,7 +51,8 @@ Flags: `--skip-recon`, `--skip-jshunter`, `--skip-asm`, `--skip-scanforge`, `--s
 ## Important constraints
 
 - Python 3.10+ required.
-- Each tool has its own `requirements.txt` and `.venv/`.
+- Single `.venv/` at root — created by `./install.sh`.
+- Per-tool deps in `requirements/*.txt`, all installed into root `.venv`.
 - Output is written to `workspace/{domain}/` by the pipeline, or to `output/{domain}/` per tool.
 - `.venv/`, `__pycache__/`, `output/`, `reports/`, `logs/`, `workspace/` are gitignored.
 - All tools require internet access.
