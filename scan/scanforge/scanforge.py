@@ -131,7 +131,10 @@ def run_nmap(targets: List[str], profile: str, output_dir: Path) -> Tuple[int, O
     xml_out = output_dir / "nmap_output.xml"
     flags = NMAP_PROFILES.get(profile, NMAP_PROFILES["basic"])
     cmd = [nmap, "-oX", str(xml_out)] + flags + ["-iL", str(targets_file)]
-    result = subprocess.run(cmd, capture_output=True, text=True)
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True)
+    except FileNotFoundError:
+        return 1, None
     if result.returncode != 0:
         return result.returncode, None
     return 0, xml_out if xml_out.exists() else None
@@ -189,7 +192,10 @@ def run_nuclei(targets: List[str], output_dir: Path, templates: str = "", templa
         cmd += ["-t", templates]
     if templates_dir:
         cmd += ["-tp", templates_dir]
-    result = subprocess.run(cmd, capture_output=True, text=True)
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True)
+    except FileNotFoundError:
+        return 1, None
     if result.returncode not in (0, 1):
         return result.returncode, None
     return 0, json_out if json_out.exists() else None

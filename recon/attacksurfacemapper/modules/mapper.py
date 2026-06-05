@@ -12,8 +12,12 @@ class Mapper:
     def correlate(self, urls: Iterable[str], categories: Dict[str, List[str]]) -> Dict[str, Dict[str, List[str]]]:
         mapping: Dict[str, Dict[str, List[str]]] = defaultdict(lambda: defaultdict(list))
         for url in urls:
-            host = urlparse(url).netloc or "unknown"
-            path = urlparse(url).path or "/"
+            try:
+                host = urlparse(url).netloc or "unknown"
+                path = urlparse(url).path or "/"
+            except ValueError:
+                host = "unknown"
+                path = url
             for category, endpoints in categories.items():
                 for endpoint in endpoints:
                     if endpoint in path:

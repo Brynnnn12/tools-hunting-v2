@@ -15,7 +15,11 @@ def find_js_urls_from_reconforge(input_dir: Path) -> Set[str]:
     for fname in RECONFORGE_FILES:
         fp = input_dir / fname
         if fp.exists():
-            for line in fp.read_text(encoding="utf-8", errors="ignore").splitlines():
+            try:
+                content = fp.read_text(encoding="utf-8", errors="ignore")
+            except (OSError, PermissionError):
+                continue
+            for line in content.splitlines():
                 line = line.strip()
                 if not line:
                     continue

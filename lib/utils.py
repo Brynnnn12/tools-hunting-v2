@@ -26,11 +26,19 @@ def read_lines(file_path: Path) -> List[str]:
 
 
 def write_text(path: Path, content: str) -> None:
-    path.write_text(content, encoding="utf-8")
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(content, encoding="utf-8")
+    except (OSError, PermissionError) as exc:
+        raise RuntimeError(f"Failed to write {path}: {exc}")
 
 
 def write_json(path: Path, data: Any) -> None:
-    path.write_text(json.dumps(data, indent=2, ensure_ascii=True), encoding="utf-8")
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(data, indent=2, ensure_ascii=True), encoding="utf-8")
+    except (OSError, PermissionError, TypeError) as exc:
+        raise RuntimeError(f"Failed to write JSON to {path}: {exc}")
 
 
 def now_timestamp() -> str:
@@ -38,8 +46,11 @@ def now_timestamp() -> str:
 
 
 def extract_domain(url: str) -> str:
-    parsed = urlparse(url)
-    return parsed.netloc or "unknown"
+    try:
+        parsed = urlparse(url)
+        return parsed.netloc or "unknown"
+    except ValueError:
+        return "unknown"
 
 
 def normalize_domain(domain: str) -> str:

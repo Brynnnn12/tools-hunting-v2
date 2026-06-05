@@ -23,6 +23,8 @@ class WhoIsModule:
         with ThreadPoolExecutor(max_workers=1) as pool:
             future = pool.submit(self._fetch_whois)
             w = future.result(timeout=15)
+        if w is None:
+            raise RuntimeError("whois returned None")
         lines: List[str] = []
         for key in [
             "domain_name", "registrar", "whois_server", "referral_url",

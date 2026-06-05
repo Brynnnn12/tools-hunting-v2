@@ -90,17 +90,26 @@ def create_structure(base: Path, targets: List[str], no_notes: bool = False) -> 
         target_dir = base / target
         for subdir, _ in DEFAULT_STRUCTURE:
             path = target_dir / subdir
-            path.mkdir(parents=True, exist_ok=True)
-            created["dirs"].append(str(path))
+            try:
+                path.mkdir(parents=True, exist_ok=True)
+                created["dirs"].append(str(path))
+            except (OSError, PermissionError) as exc:
+                logging.warning("Failed to create %s: %s", path, exc)
         env_file = target_dir / ".env"
-        if not env_file.exists():
-            env_file.write_text(ENV_TEMPLATE.format(target=target, date=now, author=AUTHOR), encoding="utf-8")
-            created["files"].append(str(env_file))
+        try:
+            if not env_file.exists():
+                env_file.write_text(ENV_TEMPLATE.format(target=target, date=now, author=AUTHOR), encoding="utf-8")
+                created["files"].append(str(env_file))
+        except (OSError, PermissionError) as exc:
+            logging.warning("Failed to write %s: %s", env_file, exc)
         if not no_notes:
             notes = target_dir / "notes.md"
-            if not notes.exists():
-                notes.write_text(NOTES_TEMPLATE.format(target=target, date=now, author=AUTHOR), encoding="utf-8")
-                created["files"].append(str(notes))
+            try:
+                if not notes.exists():
+                    notes.write_text(NOTES_TEMPLATE.format(target=target, date=now, author=AUTHOR), encoding="utf-8")
+                    created["files"].append(str(notes))
+            except (OSError, PermissionError) as exc:
+                logging.warning("Failed to write %s: %s", notes, exc)
     return created
 
 
@@ -127,11 +136,15 @@ def run_tool(name: str, args: List[str]) -> int:
     sys.stdout.flush()
     print(f"\n  \u2500\u2500 {name} \u2500\u2500\n")
     sys.stdout.flush()
-    result = subprocess.run(
-        [sys.executable, str(path)] + args,
-        cwd=str(path.parent),
-        stdin=subprocess.DEVNULL,
-    )
+    try:
+        result = subprocess.run(
+            [sys.executable, str(path)] + args,
+            cwd=str(path.parent),
+            stdin=subprocess.DEVNULL,
+        )
+    except FileNotFoundError:
+        print(f"  [!] Python executable not found")
+        return 1
     return result.returncode
 
 
@@ -139,14 +152,17 @@ def mark_env(target_dir: Path, key: str, value: str = "true") -> None:
     env_path = target_dir / ".env"
     if not env_path.exists():
         return
-    lines = env_path.read_text(encoding="utf-8").splitlines()
-    new_lines: List[str] = []
-    for line in lines:
-        if line.startswith(f"{key}="):
-            new_lines.append(f"{key}={value}")
-        else:
-            new_lines.append(line)
-    env_path.write_text("\n".join(new_lines) + "\n", encoding="utf-8")
+    try:
+        lines = env_path.read_text(encoding="utf-8").splitlines()
+        new_lines: List[str] = []
+        for line in lines:
+            if line.startswith(f"{key}="):
+                new_lines.append(f"{key}={value}")
+            else:
+                new_lines.append(line)
+        env_path.write_text("\n".join(new_lines) + "\n", encoding="utf-8")
+    except (OSError, PermissionError) as exc:
+        logging.warning("Failed to update %s: %s", env_path, exc)
 
 
 def main() -> int:

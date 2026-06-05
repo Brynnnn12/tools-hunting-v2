@@ -58,7 +58,12 @@ def run(cmd: List[str], cwd: Path, desc: str) -> int:
     print(f"  \u2500\u2500 {desc} \u2500\u2500")
     sys.stdout.flush()
     logging.info("Running: %s (cwd=%s)", " ".join(str(c) for c in cmd), cwd)
-    result = subprocess.run(cmd, cwd=cwd)
+    try:
+        result = subprocess.run(cmd, cwd=cwd)
+    except FileNotFoundError:
+        print(f"  [!] {desc} failed \u2014 executable not found")
+        logging.warning("%s failed \u2014 executable not found", desc)
+        return 1
     if result.returncode:
         print(f"  [!] {desc} failed (exit {result.returncode})")
         logging.warning("%s failed (exit %d)", desc, result.returncode)

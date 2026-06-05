@@ -25,9 +25,17 @@ class Config:
 
     def __post_init__(self) -> None:
         find_and_load_dotenv()
-        if _env("JSHUNTER_THREADS", ""):
-            self.default_threads = int(_env("JSHUNTER_THREADS", ""))
-        if _env("JSHUNTER_TIMEOUT", ""):
-            self.timeout = int(_env("JSHUNTER_TIMEOUT", ""))
+        threads_raw = _env("JSHUNTER_THREADS", "")
+        if threads_raw:
+            try:
+                self.default_threads = int(threads_raw)
+            except ValueError:
+                pass
+        timeout_raw = _env("JSHUNTER_TIMEOUT", "")
+        if timeout_raw:
+            try:
+                self.timeout = int(timeout_raw)
+            except ValueError:
+                pass
         if _env("JSHUNTER_USER_AGENT", ""):
             self.user_agent = _env("JSHUNTER_USER_AGENT", "")
